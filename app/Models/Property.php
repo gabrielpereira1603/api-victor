@@ -11,9 +11,19 @@ class Property extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'value', 'bedrooms', 'bathrooms', 'suites', 'parking_spaces',
-        'living_rooms', 'kitchens', 'has_pool', 'pool_size',
-        'built_area', 'land_area', 'neighborhood_id', 'city_id', 'state_id'
+        'photo_url',
+        'value',
+        'bedrooms',
+        'bathrooms',
+        'living_rooms',
+        'kitchens',
+        'parking_spaces',
+        'pools',
+        'built_area',
+        'land_area',
+        'neighborhood_id',
+        'city_id',
+        'state_id'
     ];
 
     protected $dates = ['deleted_at'];

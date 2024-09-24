@@ -36,7 +36,6 @@ class CreatePropertyController extends Controller
             return redirect()->route('home')->withErrors($validator)->withInput();
         }
 
-        // Processar o upload da imagem
         $photoPath = null;
 
         if ($request->hasFile('photo_url')) {
@@ -46,13 +45,14 @@ class CreatePropertyController extends Controller
             Log::warning('Nenhuma imagem foi enviada.'); // Log se nenhuma imagem foi enviada
         }
 
-        // Criar ou encontrar estado
+        $fullPath = asset('storage/app/public/' . $photoPath);
+
+
         $state = State::where('slug', Str::slug($request->state))->first();
         if (!$state) {
             $state = State::create(['name' => $request->state, 'slug' => Str::slug($request->state)]);
         }
 
-        // Criar ou encontrar cidade
         $city = City::where('slug', Str::slug($request->city))
             ->where('state_id', $state->id)
             ->first();
@@ -64,7 +64,6 @@ class CreatePropertyController extends Controller
             ]);
         }
 
-        // Criar ou encontrar bairro, se fornecido
         $neighborhoodId = null;
         if ($request->neighborhood) {
             $neighborhood = Neighborhood::where('slug', Str::slug($request->neighborhood))
@@ -80,12 +79,10 @@ class CreatePropertyController extends Controller
             $neighborhoodId = $neighborhood->id;
         }
 
-        // Limpar e formatar os dados antes de armazenar
-        Log::info('Tentando criar a propriedade com photo_url: ' . $photoPath); // Verifique o valor antes de salvar
 
         $property = Property::create([
-            'photo_url' => $photoPath, // Use apenas o caminho relativo
-            'value' => preg_replace('/[^\d]/', '', $request->value) / 100, // Se você precisa do valor como número
+            'photo_url' => $fullPath,
+            'value' => $request->value,
             'bedrooms' => $request->bedrooms,
             'bathrooms' => $request->bathrooms,
             'living_rooms' => $request->living_rooms,
@@ -98,8 +95,6 @@ class CreatePropertyController extends Controller
             'city_id' => $city->id,
             'state_id' => $state->id
         ]);
-
-        Log::info('Propriedade cadastrada: ' . $property->id);
 
         return redirect()->route('home')->with('success', 'Propriedade ' . $property->id . ' cadastrada com sucesso!');
     }

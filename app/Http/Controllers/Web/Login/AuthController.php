@@ -20,12 +20,10 @@ class AuthController extends Controller
         $user = User::where('login', $request->login)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'Credenciais inválidas.'], 401);
+            return redirect()->back()->withErrors(['login' => 'Credenciais inválidas.'])->withInput();
         }
 
         Auth::login($user);
-
-        $token = $user->createToken('loginToken')->plainTextToken;
 
         return redirect()->intended('/home');
     }
