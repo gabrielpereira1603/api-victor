@@ -21,5 +21,5 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/properties', [CreatePropertyController::class, 'store'])->name('createPropertiesWEB');
-
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

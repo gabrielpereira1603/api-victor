@@ -162,7 +162,7 @@ label[for=nav-toggle] {
 }
 #nav-content::-webkit-scrollbar-thumb {
     border-radius: 99px;
-    background-color: #943746;
+    background-color: white;
 }
 #nav-content::-webkit-scrollbar-button {
     height: 16px;
@@ -336,7 +336,7 @@ label[for=nav-footer-toggle] {
 
 #nav-footer-content {
     margin: 0 16px 16px 16px;
-    border-top: solid 1px #943746;
+    border-top: solid 1px white;
     padding: 16px 0;
     color: var(--navbar-light-secondary);
     font-size: 0.8rem;
@@ -348,7 +348,7 @@ label[for=nav-footer-toggle] {
 }
 #nav-footer-content::-webkit-scrollbar-thumb {
     border-radius: 99px;
-    background-color: #943746;
+    background-color: white;
 }
 
 .nav-footer-button {
