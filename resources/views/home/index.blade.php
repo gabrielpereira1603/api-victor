@@ -161,15 +161,32 @@
             });
 
             // Máscara para áreas (m²)
-            $('#built_area').mask('000.00', {reverse: true}).on('blur', function() {
+            $('#built_area').mask('000.000,00', {reverse: true}).on('blur', function() {
                 var value = $(this).val().replace(/\D/g, ''); // Remove caracteres não numéricos
-                $(this).val(value === '' ? '' : value + ' m²');
+                if (value !== '') {
+                    var formattedValue = (parseInt(value) / 100).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $(this).val(formattedValue + ' m²');
+                } else {
+                    $(this).val('');
+                }
             });
 
-            $('#land_area').mask('000.000', {reverse: true}).on('blur', function() {
+            $('#land_area').mask('000.000,00', {reverse: true}).on('blur', function() {
                 var value = $(this).val().replace(/\D/g, ''); // Remove caracteres não numéricos
-                $(this).val(value === '' ? '' : value + ' m²');
+                if (value !== '') {
+                    var formattedValue = (parseInt(value) / 100).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $(this).val(formattedValue + ' m²');
+                } else {
+                    $(this).val('');
+                }
             });
+
         });
     </script>
 
