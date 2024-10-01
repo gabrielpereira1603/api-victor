@@ -9,9 +9,16 @@
     </div>
     <div id="nav-content">
         <div class="nav-button {{ Request::routeIs('home') ? 'active-module' : '' }}">
-            <i class="fas fa-home" data-url="{{ route('home') }}"></i>
+            <i class="fas fa-solid fa-square-plus" data-url="{{ route('home') }}"></i>
             <span>
-                <a href="{{ route('home') }}">Início</a>
+                <a href="{{ route('home') }}">Cadastrar</a>
+            </span>
+        </div>
+
+        <div class="nav-button {{ Request::routeIs('updatePropertiesWEB') ? 'active-module' : '' }}">
+            <i class="fas fa-solid fa-house-flag" data-url="{{ route('updatePropertiesWEB') }}"></i>
+            <span>
+                <a href="{{ route('updatePropertiesWEB') }}">Cadastrar</a>
             </span>
         </div>
       {{--  <div class="nav-button {{ Request::routeIs('dashboard') ? 'active-module' : '' }}">
@@ -81,11 +88,11 @@
     <div id="nav-footer">
         <div id="nav-footer-heading">
             <div id="nav-footer-avatar">
-                <img src="#" alt="Logo Colaborador"/>
+                <img src="https://victornepo.somosdevteam.com/storage/app/public/profile_images/perfil_1.jpeg" alt="Logo Colaborador"/>
             </div>
             <div id="nav-footer-titlebox">
-                <a id="nav-footer-title" href="https://codepen.io/uahnbu/pens/public" target="_blank"></a>
-                <span id="nav-footer-subtitle"></span>
+                <a id="nav-footer-title" href="#" target="_blank">{{ $user->name }}</a>
+                <span id="nav-footer-subtitle">{{ $user->email }}</span>
             </div>
             <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
         </div>

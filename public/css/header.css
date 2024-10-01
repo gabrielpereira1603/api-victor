@@ -57,7 +57,7 @@
     left: 1vw;
     top: 1vw;
     height: calc(100% - 2vw);
-    background: rgb(69,151,69)  ;
+    background: rgb(69,151,69) ;
     border-radius: 16px;
     display: flex;
     flex-direction: column;

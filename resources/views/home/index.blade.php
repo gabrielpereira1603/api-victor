@@ -1,6 +1,6 @@
 <x-layoutMain title="Início">
     <div class="main-title" style="width: 100%; margin: 20px;">
-        <h4>Bem-Vindo, !</h4>
+        <h4>Bem-Vindo, {{ $user->name }}!</h4>
     </div>
 
     @if ($errors->any())

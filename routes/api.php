@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Property\CreatePropertyController;
 use App\Http\Controllers\Api\Property\PropertyController;
+use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('properties')->group(function () {
     Route::get('/all', [PropertyController::class, 'findAll'])->name('allProperties');
     Route::get('/one/{id}', [PropertyController::class, 'findOne'])->name('oneProperty');
+    Route::post('/search', [PropertyController::class, 'search']);
+});
+
+Route::get('/cities/search', function (Request $request) {
+    $query = $request->input('query');
+    $cities = City::where('name', 'like', '%' . $query . '%')->get();
+    return response()->json($cities);
 });

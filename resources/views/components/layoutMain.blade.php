@@ -29,7 +29,7 @@
 </head>
 
 <body style="margin-left: 92px; padding: 12px">
-@include('Header.index')
+@include('Header.index', ['user' => Auth::user()])
 
 <div class="alert-container">
     @if(Session::has('error'))

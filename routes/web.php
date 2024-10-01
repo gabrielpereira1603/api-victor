@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\Home\CreatePropertyController;
 use App\Http\Controllers\Web\Home\HomeController;
 use App\Http\Controllers\Web\Login\AuthController;
 use App\Http\Controllers\Web\Login\LoginController;
+use App\Http\Controllers\Web\Property\PropertyController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/properties', [CreatePropertyController::class, 'store'])->name('createPropertiesWEB');
+
+    Route::get('/properties/edit', [PropertyController::class, 'index'])->name('updatePropertiesWEB');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
