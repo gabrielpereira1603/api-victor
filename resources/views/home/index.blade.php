@@ -150,11 +150,9 @@
             const fileName = this.files[0] ? this.files[0].name : 'Clique ou arraste uma imagem aqui';
             document.getElementById('file-name').textContent = fileName;
         });
-    </script>
 
-    <script>
+        // Máscara para o valor da propriedade (R$)
         $(document).ready(function () {
-            // Máscara para o valor da propriedade (R$)
             $('#value').mask('000.000.000.000.000,00', {reverse: true}).on('blur', function() {
                 var value = $(this).val().replace(/\D/g, ''); // Remove caracteres não numéricos
                 $(this).val(value === '' ? '' : parseFloat(value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
@@ -187,8 +185,12 @@
                 }
             });
 
+            // Remover máscara do valor da propriedade antes do envio
+            $('form').on('submit', function () {
+                var rawValue = $('#value').val().replace(/\D/g, ''); // Remove caracteres não numéricos
+                $('#value').val(rawValue === '' ? '' : (parseFloat(rawValue) / 100).toFixed(2)); // Armazena apenas o valor em formato decimal
+            });
         });
     </script>
-
 
 </x-layoutMain>

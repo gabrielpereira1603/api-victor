@@ -20,7 +20,7 @@ class CreatePropertyController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'neighborhood' => 'nullable|string|max:255',
-            'value' => 'required|string|max:255',
+            'value' => 'required|numeric',
             'bedrooms' => 'required|integer|min:0',
             'bathrooms' => 'required|integer|min:0',
             'parking_spaces' => 'required|integer|min:0',

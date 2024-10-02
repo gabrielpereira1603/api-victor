@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('photo_url', 255)->nullable();
             $table->string('maps')->nullable();
-            $table->string('value', '250');
+            $table->decimal('value', 15, 2);
             $table->integer('bedrooms');
             $table->integer('bathrooms');
             $table->integer('suites')->default(0)->nullable();

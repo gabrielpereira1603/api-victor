@@ -20,7 +20,6 @@ class PropertyController extends Controller
 
     public function search(Request $request)
     {
-        // Validação dos campos (opcional)
         $request->validate([
             'cidade' => 'nullable|string|max:255',
             'minValue' => 'nullable|string',
@@ -28,10 +27,8 @@ class PropertyController extends Controller
             'quartos' => 'nullable|string|in:1,2,3,4,5+',
         ]);
 
-        // Iniciar a consulta
-        $query = Property::query();
+        $query = Property::with(['neighborhood', 'city', 'state']);
 
-        // Adiciona filtros conforme os campos preenchidos
         if ($request->filled('cidade')) {
             $city = City::where('name', 'LIKE', '%' . $request->cidade . '%')->first();
             if ($city) {
@@ -53,6 +50,7 @@ class PropertyController extends Controller
             $query->where('bedrooms', '=', $request->quartos);
         }
 
+        // Obtém as propriedades com os relacionamentos carregados
         $properties = $query->get();
 
         return response()->json($properties);
