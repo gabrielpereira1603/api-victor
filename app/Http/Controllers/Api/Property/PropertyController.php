@@ -25,9 +25,8 @@ class PropertyController extends Controller
             'cidade' => 'nullable|string|max:255',
             'minValue' => 'nullable|numeric',
             'maxValue' => 'nullable|numeric',
-            'quartos' => 'nullable|string|in:1,2,3,4,5+',
+            'bedrooms' => 'nullable|',
         ]);
-
         // Inicializa a consulta na tabela de propriedades, já incluindo os relacionamentos
         $query = Property::with(['neighborhood', 'city', 'state']);
 
@@ -51,13 +50,12 @@ class PropertyController extends Controller
         if ($request->filled('maxValue')) {
             $query->where('value', '<=', $request->maxValue);
         }
-
         // Filtro por número de quartos
-        if ($request->filled('quartos')) {
-            if ($request->quartos === '5+') {
+        if ($request->filled('bedrooms')) {
+            if ($request->bedrooms === '5+') {
                 $query->where('bedrooms', '>=', 5);
             } else {
-                $query->where('bedrooms', '=', $request->quartos);
+                $query->where('bedrooms', '=', $request->bedrooms);
             }
         }
 

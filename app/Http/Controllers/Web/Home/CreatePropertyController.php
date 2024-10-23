@@ -40,35 +40,33 @@ class CreatePropertyController extends Controller
 
         if ($request->hasFile('photo_url')) {
             $photoPath = $request->file('photo_url')->store('properties_images', 'public');
-            Log::info('Caminho da imagem armazenado: ' . $photoPath); // Verifique se o caminho da imagem está correto
+            Log::info('Caminho da imagem armazenado: ' . $photoPath);
         } else {
-            Log::warning('Nenhuma imagem foi enviada.'); // Log se nenhuma imagem foi enviada
+            Log::warning('Nenhuma imagem foi enviada.');
         }
 
-        $fullPath = asset('storage/app/public/' . $photoPath);
+        $fullPath = $photoPath ? asset('storage/' . $photoPath) : null;
 
+        // Cria ou obtém o estado
+        $state = State::firstOrCreate(
+            ['slug' => Str::slug($request->state)],
+            ['name' => $request->state]
+        );
 
-        $state = State::where('slug', Str::slug($request->state))->first();
-        if (!$state) {
-            $state = State::create(['name' => $request->state, 'slug' => Str::slug($request->state)]);
-        }
+        // Cria ou obtém a cidade
+        $city = City::firstOrCreate(
+            ['slug' => Str::slug($request->city), 'state_id' => $state->id],
+            ['name' => $request->city]
+        );
 
-        $city = City::where('slug', Str::slug($request->city))
-            ->where('state_id', $state->id)
-            ->first();
-        if (!$city) {
-            $city = City::create([
-                'name' => $request->city,
-                'slug' => Str::slug($request->city),
-                'state_id' => $state->id
-            ]);
-        }
-
+        // Cria ou obtém o bairro, se fornecido
         $neighborhoodId = null;
         if ($request->neighborhood) {
+            // Primeiro tenta encontrar o bairro pelo slug e city_id
             $neighborhood = Neighborhood::where('slug', Str::slug($request->neighborhood))
-                ->where('city_id', $city->id)
                 ->first();
+
+            // Se não encontrou, cria o bairro
             if (!$neighborhood) {
                 $neighborhood = Neighborhood::create([
                     'name' => $request->neighborhood,
@@ -79,7 +77,7 @@ class CreatePropertyController extends Controller
             $neighborhoodId = $neighborhood->id;
         }
 
-
+        // Cria a propriedade
         $property = Property::create([
             'photo_url' => $fullPath,
             'value' => $request->value,

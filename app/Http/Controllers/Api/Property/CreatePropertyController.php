@@ -21,15 +21,15 @@ class CreatePropertyController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'neighborhood' => 'nullable|string|max:255',
-            'value' => 'required|',
+            'value' => 'required|numeric|min:0',
             'bedrooms' => 'required|integer|min:0',
             'bathrooms' => 'required|integer|min:0',
             'parking_spaces' => 'required|integer|min:0',
             'living_rooms' => 'nullable|integer|min:0',
             'kitchens' => 'nullable|integer|min:0',
             'pools' => 'nullable|integer|min:0',
-            'built_area' => 'nullable',
-            'land_area' => 'nullable',
+            'built_area' => 'nullable|string',
+            'land_area' => 'nullable|string',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -41,28 +41,35 @@ class CreatePropertyController extends Controller
             ], 422);
         }
 
+        // Upload da foto, se fornecida
         $photoPath = null;
         if ($request->hasFile('photo_url')) {
             $photoPath = $request->file('photo_url')->store('properties_images', 'public');
         }
 
-        $state = State::firstOrCreate(['name' => $request->state, 'slug' => Str::slug($request->state)]);
-        $city = City::firstOrCreate([
-            'name' => $request->city,
-            'slug' => Str::slug($request->city),
-            'state_id' => $state->id
-        ]);
+        // Primeiro cria ou obtém o estado
+        $state = State::firstOrCreate(
+            ['name' => $request->state],
+            ['slug' => Str::slug($request->state)]
+        );
 
+        // Depois cria ou obtém a cidade
+        $city = City::firstOrCreate(
+            ['name' => $request->city, 'state_id' => $state->id],
+            ['slug' => Str::slug($request->city)]
+        );
+
+        // Cria ou obtém o bairro (se fornecido)
         $neighborhoodId = null;
         if ($request->neighborhood) {
-            $neighborhood = Neighborhood::firstOrCreate([
-                'name' => $request->neighborhood,
-                'slug' => Str::slug($request->neighborhood),
-                'city_id' => $city->id
-            ]);
+            $neighborhood = Neighborhood::firstOrCreate(
+                ['slug' => Str::slug($request->neighborhood), 'city_id' => $city->id],
+                ['name' => $request->neighborhood]
+            );
             $neighborhoodId = $neighborhood->id;
         }
 
+        // Criação da propriedade
         $property = Property::create([
             'photo_url' => $photoPath,
             'maps' => $request->maps,
