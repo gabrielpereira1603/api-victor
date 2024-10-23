@@ -20,34 +20,45 @@ class PropertyController extends Controller
 
     public function search(Request $request)
     {
+        // Validação dos campos da requisição
         $request->validate([
             'cidade' => 'nullable|string|max:255',
-            'minValue' => 'nullable|string',
-            'maxValue' => 'nullable|string',
+            'minValue' => 'nullable|numeric',
+            'maxValue' => 'nullable|numeric',
             'quartos' => 'nullable|string|in:1,2,3,4,5+',
         ]);
 
+        // Inicializa a consulta na tabela de propriedades, já incluindo os relacionamentos
         $query = Property::with(['neighborhood', 'city', 'state']);
 
+        // Filtro por cidade, se fornecido
         if ($request->filled('cidade')) {
             $city = City::where('name', 'LIKE', '%' . $request->cidade . '%')->first();
             if ($city) {
                 $query->where('city_id', '=', $city->id);
             } else {
+                // Se a cidade não for encontrada, não há propriedades para exibir
                 return response()->json([]);
             }
         }
 
+        // Filtro pelo valor mínimo
         if ($request->filled('minValue')) {
             $query->where('value', '>=', $request->minValue);
         }
 
+        // Filtro pelo valor máximo
         if ($request->filled('maxValue')) {
             $query->where('value', '<=', $request->maxValue);
         }
 
+        // Filtro por número de quartos
         if ($request->filled('quartos')) {
-            $query->where('bedrooms', '=', $request->quartos);
+            if ($request->quartos === '5+') {
+                $query->where('bedrooms', '>=', 5);
+            } else {
+                $query->where('bedrooms', '=', $request->quartos);
+            }
         }
 
         // Obtém as propriedades com os relacionamentos carregados
