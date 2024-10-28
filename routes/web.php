@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('properties')->middleware('auth')->group(function () {
     Route::get('/', [PropertyController::class, 'index'])->name('properties');
     Route::get('/create', [PropertyController::class, 'indexCreate'])->name('properties.create');
-
+    Route::post('/store', [PropertyController::class, 'store'])->name('properties.store');
     Route::patch('/{property}/disable', [PropertyController::class, 'disable'])->name('properties.disable');
     Route::patch('/{property}/restore', [PropertyController::class, 'restore'])->name('properties.restore');
     Route::delete('/{property}/force-delete', [PropertyController::class, 'forceDelete'])->name('properties.forceDelete');
