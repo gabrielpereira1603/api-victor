@@ -91,7 +91,7 @@ class CreatePropertyController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Propriedade cadastrada com sucesso!',
-            'property' => $property
+            'properties' => $property
         ], 201);
     }
 }

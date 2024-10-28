@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Web\Property\PropertyController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::prefix('properties')->middleware('auth')->group(function () {
+    Route::get('/', [PropertyController::class, 'index'])->name('properties');
+    Route::get('/create', [PropertyController::class, 'indexCreate'])->name('properties.create');
+
+    Route::patch('/{property}/disable', [PropertyController::class, 'disable'])->name('properties.disable');
+    Route::patch('/{property}/restore', [PropertyController::class, 'restore'])->name('properties.restore');
+    Route::delete('/{property}/force-delete', [PropertyController::class, 'forceDelete'])->name('properties.forceDelete');
+});
 require __DIR__.'/auth.php';
