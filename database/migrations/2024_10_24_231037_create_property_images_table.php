@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->string('image_url', 255);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

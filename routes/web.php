@@ -26,5 +26,11 @@ Route::prefix('properties')->middleware('auth')->group(function () {
     Route::patch('/{property}/disable', [PropertyController::class, 'disable'])->name('properties.disable');
     Route::patch('/{property}/restore', [PropertyController::class, 'restore'])->name('properties.restore');
     Route::delete('/{property}/force-delete', [PropertyController::class, 'forceDelete'])->name('properties.forceDelete');
+    // Rota para exibir as fotos de uma propriedade específica
+    Route::get('/properties/{property}/photos', [PropertyController::class, 'editPhotos'])->name('properties.photos');
+
+// Rota para adicionar fotos
+    Route::post('/properties/{property}/photos', [PropertyController::class, 'storePhotos'])->name('properties.photos.store');
+
 });
 require __DIR__.'/auth.php';

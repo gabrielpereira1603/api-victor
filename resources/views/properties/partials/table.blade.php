@@ -98,7 +98,8 @@
                                     <x-view-icon color="text-blue-500" />
                                     Visualizar
                                 </x-dropdown-link>
-                                <x-dropdown-link href="javascript:void(0)" class="flex items-center">
+                                <x-dropdown-link href="javascript:void(0)" class="flex items-center"
+                                                 @click="$dispatch('open-modal', 'editPhotosModal{{ $property->id }}')">
                                     <x-photos-icon color="text-blue-500" />
                                     Editar Fotos
                                 </x-dropdown-link>
@@ -121,43 +122,8 @@
                     </x-dropdown>
                 </td>
             </tr>
-
-            <x-modal :name="'viewProperty' . $property->id" maxWidth="2xl">
-                <div class="p-6 space-y-6">
-                    <div class="flex justify-start mb-4">
-                        <img src="{{ $property->photo_url }}" alt="Foto da Propriedade" class="w-36 h-36 object-cover rounded-lg shadow-md">
-                    </div>
-
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Detalhes da Propriedade</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <p><strong>Valor:</strong> R$ {{ number_format($property->value, 2, ',', '.') }}</p>
-                        <p><strong>Quartos:</strong> {{ $property->bedrooms }}</p>
-                        <p><strong>Banheiros:</strong> {{ $property->bathrooms }}</p>
-                        <p><strong>Suítes:</strong> {{ $property->suites }}</p>
-                        <p><strong>Salas de Estar:</strong> {{ $property->living_rooms }}</p>
-                        <p><strong>Cozinhas:</strong> {{ $property->kitchens }}</p>
-                        <p><strong>Vagas da Garagem:</strong> {{ $property->parking_spaces }}</p>
-                        <p><strong>Piscinas:</strong> {{ $property->pools }}</p>
-                        <p><strong>Área Construída:</strong> {{ $property->built_area }} m²</p>
-                        <p><strong>Área do Terreno:</strong> {{ $property->land_area }} m²</p>
-                        <p><strong>Data de Criação:</strong> {{ $property->created_at->format('d/m/Y H:i') }}</p>
-                        <p><strong>Última Atualização:</strong> {{ $property->updated_at->format('d/m/Y H:i') }}</p>
-                    </div>
-
-                    <h4 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Endereço</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <p><strong>Bairro:</strong> {{ $property->neighborhood->name }}</p>
-                        <p><strong>Cidade:</strong> {{ $property->city->name }}</p>
-                        <p><strong>Estado:</strong> {{ $property->state->name }}</p>
-                    </div>
-
-                    <div class="flex justify-end mt-6">
-                        <x-primary-button @click="$dispatch('close-modal', 'viewProperty{{ $property->id }}')">
-                            Fechar
-                        </x-primary-button>
-                    </div>
-                </div>
-            </x-modal>
+            @include('properties.partials.modal-photos', ['property' => $property, 'photos' => $property->images])
+            @include('properties.partials.modal-view-more', ['properties' => $properties])
         @endforeach
         </tbody>
     </table>

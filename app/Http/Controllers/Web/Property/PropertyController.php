@@ -17,7 +17,7 @@ class PropertyController extends Controller
 {
     public function index()
     {
-        $properties = Property::with(['neighborhood', 'city', 'state'])->withTrashed()->get();
+        $properties = Property::with(['neighborhood', 'city', 'state', 'images'])->withTrashed()->get();
         return view('properties', compact('properties'));
     }
 
@@ -59,26 +59,34 @@ class PropertyController extends Controller
         }
 
         $fullPath = $photoPath ? asset('storage/' . $photoPath) : null;
+
         // Cria ou obtém o estado
         $state = State::firstOrCreate(
             ['slug' => Str::slug($request->state)],
             ['name' => $request->state]
         );
 
-        // Cria ou obtém a cidade
-        $city = City::firstOrCreate(
-            ['slug' => Str::slug($request->city), 'state_id' => $state->id],
-            ['name' => $request->city]
-        );
+        // Verifica se a cidade já existe para o estado específico
+        $city = City::where('slug', Str::slug($request->city))
+            ->where('state_id', $state->id)
+            ->first();
+
+        // Se a cidade não existir, cria um novo registro
+        if (!$city) {
+            $city = City::create([
+                'slug' => Str::slug($request->city),
+                'state_id' => $state->id,
+                'name' => $request->city
+            ]);
+        }
 
         // Cria ou obtém o bairro, se fornecido
         $neighborhoodId = null;
         if ($request->neighborhood) {
-            // Primeiro tenta encontrar o bairro pelo slug e city_id
             $neighborhood = Neighborhood::where('slug', Str::slug($request->neighborhood))
+                ->where('city_id', $city->id)
                 ->first();
 
-            // Se não encontrou, cria o bairro
             if (!$neighborhood) {
                 $neighborhood = Neighborhood::create([
                     'name' => $request->neighborhood,
@@ -109,7 +117,6 @@ class PropertyController extends Controller
         return redirect()->route('properties')->with('success', 'Propriedade ' . $property->id . ' cadastrada com sucesso!');
     }
 
-
     public function disable(Property $property)
     {
         $property->delete();
@@ -129,4 +136,27 @@ class PropertyController extends Controller
         $property->forceDelete();
         return redirect()->route('properties')->with('success', 'Propriedade excluída definitivamente com sucesso!');
     }
+
+    public function editPhotos(Property $property)
+    {
+        $photos = $property->images; // Obtém as fotos da propriedade
+        return view('properties.partials.modal-photos', compact('property', 'photos'));
+    }
+
+    public function storePhotos(Request $request, Property $property)
+    {
+        $request->validate([
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validação para cada imagem
+        ]);
+
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('properties_images', 'public');
+                $property->images()->create(['image_url' => $path]);
+            }
+        }
+
+        return redirect()->route('properties')->with('status', 'Fotos adicionadas com sucesso!');
+    }
+
 }
