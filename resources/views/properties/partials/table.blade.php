@@ -103,7 +103,7 @@
                                     <x-photos-icon color="text-blue-500" />
                                     Editar Fotos
                                 </x-dropdown-link>
-                                <x-dropdown-link href="" class="flex items-center">
+                                <x-dropdown-link href="{{ route('properties.update', ['property' => $property->id]) }}" class="flex items-center">
                                     <x-edit-icon color="text-amber-500" />
                                     Editar
                                 </x-dropdown-link>

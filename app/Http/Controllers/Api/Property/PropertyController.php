@@ -19,6 +19,13 @@ class PropertyController extends Controller
     {
     }
 
+    public function findOneProperties($id)
+    {
+        $property = Property::with('images')->findOrFail($id);
+
+        return response()->json($property);
+    }
+
     public function search(Request $request): JsonResponse
     {
         $request->validate([

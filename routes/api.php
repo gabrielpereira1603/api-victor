@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::prefix('properties')->group(function () {
     Route::get('/all', [PropertyController::class, 'findAll'])->name('allProperties');
-    Route::get('/one/{id}', [PropertyController::class, 'findOne'])->name('oneProperty');
+    Route::get('/{id}', [PropertyController::class, 'findOneProperties'])->name('oneProperty');
     Route::post('/search', [PropertyController::class, 'search']);
 });
 

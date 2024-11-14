@@ -137,12 +137,6 @@ class PropertyController extends Controller
         return redirect()->route('properties')->with('success', 'Propriedade excluída definitivamente com sucesso!');
     }
 
-    public function editPhotos(Property $property)
-    {
-        $photos = $property->images; // Obtém as fotos da propriedade
-        return view('properties.partials.modal-photos', compact('property', 'photos'));
-    }
-
     public function storePhotos(Request $request, Property $property)
     {
         $request->validate([
