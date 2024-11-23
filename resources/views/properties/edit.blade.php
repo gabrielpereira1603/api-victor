@@ -41,15 +41,16 @@
                             </template>
                         </label>
 
-                        <input type="file" name="photo_url" id="photo_url" class="hidden"
-                               :disabled="photoUrl ? true : false"
-                               @change="let file = $event.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => photoUrl = e.target.result;
-                            reader.readAsDataURL(file);
-                        }">
-                    </div>
+                        <input
+                            type="file" name="photos[]" id="photo_url" class="hidden" multiple
+                            :disabled="photoUrl ? true : false"
+                            @change="let file = $event.target.files[0];
+                           if (file) {
+                               const reader = new FileReader();
+                               reader.onload = (e) => photoUrl = e.target.result;
+                               reader.readAsDataURL(file);
+                           }"
+                        >
 
                     <!-- Formulário de deletar foto -->
                     <form id="delete-photo-form" action="{{ route('properties.photo.delete', ['property' => $property->id]) }}" method="POST" style="display: none;">
