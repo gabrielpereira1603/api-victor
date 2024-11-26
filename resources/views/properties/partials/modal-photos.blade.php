@@ -4,31 +4,32 @@
 
         <div class="flex justify-between items-center">
             <x-input-label for="EditPhotos" value="Cadastrar Novas Fotos"></x-input-label>
-            <!-- Botão de Upload -->
             <form id="photoUploadForm" action="{{ route('properties.photos.store', ['property' => $property->id]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
                 @csrf
                 <div class="flex items-center gap-4">
+                    <input type="file" name="photos[]" multiple accept="image/*" class="hidden" x-ref="photoUpload" id="photoUpload"
+                           @change="handleFiles">
                     <button type="submit" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded">
-                        <x-save-icon color="white"/>
+                        <x-save-icon color="white" />
                         <span>Salvar Fotos</span>
                     </button>
                 </div>
             </form>
         </div>
 
-        <!-- Área de arrastar ou clicar para selecionar fotos -->
         <template x-if="selectedPhotos.length === 0">
             <div class="border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg p-6 w-full flex flex-col items-center justify-center text-center cursor-pointer"
                  @click="openFileSelector">
+                <!-- Ícone e mensagem -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h10a4 4 0 004-4V7a4 4 0 00-4-4H7a4 4 0 00-4 4v8z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10l4 4m0 0l4-4m-4 4V3" />
                 </svg>
-                <p class="mt-2 text-sm text-gray-900 dark:text-gray-400">Arraste ou clique para selecionar fotos</p>
+                <p class="mt-2 text-sm text-gray-900 dark:text-gray-400">Clique aqui para selecionar fotos</p>
             </div>
         </template>
 
-        <!-- Pré-visualização das fotos selecionadas -->
+
         <div x-show="selectedPhotos.length > 0" class="grid grid-cols-3 md:grid-cols-3 gap-4 mt-4">
             <template x-for="(photo, index) in selectedPhotos" :key="index">
                 <div class="relative">
@@ -43,13 +44,11 @@
             </template>
         </div>
 
+
         <button type="button" x-show="selectedPhotos.length > 0" @click="openFileSelector" class="flex items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded mt-4">
             <x-add-icon />
             <span>Selecionar Mais Fotos</span>
         </button>
-
-        <input type="file" name="photos[]" multiple class="hidden" x-ref="photoUpload" id="photoUpload" form="photoUploadForm"
-               @change="handleFiles">
 
         <!-- Galeria de Fotos Existentes -->
         <x-input-label for="currentPhotos" value="Fotos Cadastradas"></x-input-label>
@@ -71,7 +70,16 @@
             @endforeach
         </div>
 
-        <div class="flex justify-end mt-6">
+        <div class="flex justify-end mt-6 gap-2">
+            <form id="" action="" method="POST" class="mt-4">
+                @csrf
+                <div class="flex items-center gap-4">
+                    <button type="submit" class="flex items-center bg-red-600 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded">
+                        <x-delete-icon color="white"/>
+                        <span>Apagar Todas as Fotos</span>
+                    </button>
+                </div>
+            </form>
             <x-primary-button @click="$dispatch('close-modal', 'editPhotosModal{{ $property->id }}')">Fechar</x-primary-button>
         </div>
     </div>
@@ -81,12 +89,16 @@
             return {
                 selectedPhotos: [],
                 isSelectingFiles: false,
+
+                // Abrir seletor de arquivos
                 openFileSelector() {
                     if (!this.isSelectingFiles) {
                         this.isSelectingFiles = true;
                         this.$refs.photoUpload.click();
                     }
                 },
+
+                // Manipular arquivos selecionados
                 handleFiles(event) {
                     const files = event.target.files;
                     for (let i = 0; i < files.length; i++) {
@@ -96,13 +108,19 @@
                         this.isSelectingFiles = false;
                     }, 500);
                 },
+
+                // Remover foto selecionada
                 removePhoto(index) {
                     this.selectedPhotos.splice(index, 1);
                 },
+
+                // Fechar modal e limpar seleção
                 closeModal() {
                     this.selectedPhotos = [];
                     this.$dispatch('close-modal', 'editPhotosModal{{ $property->id }}');
                 },
+
+                // Confirmar exclusão de foto
                 confirmDelete(photoId) {
                     Swal.fire({
                         title: 'Você tem certeza?',
@@ -121,5 +139,6 @@
                 },
             };
         }
+
     </script>
 </x-modal>

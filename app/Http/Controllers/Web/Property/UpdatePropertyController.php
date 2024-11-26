@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 
 class UpdatePropertyController extends Controller
 {
-    // Exibe a página de edição (já existe)
     public function index(Property $property)
     {
         $property->load(['neighborhood', 'city', 'state']);
