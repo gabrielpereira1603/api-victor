@@ -37,6 +37,7 @@ Route::prefix('properties')->middleware('auth')->group(function () {
 
     Route::post('/properties/{property}/photos', [PropertyImageController::class, 'store'])->name('properties.photos.store');
     Route::delete('/properties/photos/{photo}', [PropertyImageController::class, 'destroy'])->name('properties.photos.destroy');
+    Route::delete('properties/{propertyId}/photos/clear', [PropertyImageController::class, 'clearAllPhotos'])->name('properties.photos.clear');
 
 });
 require __DIR__.'/auth.php';

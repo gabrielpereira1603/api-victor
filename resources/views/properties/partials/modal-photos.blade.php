@@ -45,10 +45,20 @@
         </div>
 
 
-        <button type="button" x-show="selectedPhotos.length > 0" @click="openFileSelector" class="flex items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded mt-4">
-            <x-add-icon />
-            <span>Selecionar Mais Fotos</span>
-        </button>
+        <div class="flex gap-x-4 mt-4 gap-2">
+            <button type="button" x-show="selectedPhotos.length > 0" @click="clearSelectedPhotos"
+                    class="flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
+                <x-delete-icon color="white"/>
+                <span>Limpar Fotos Selecionadas</span>
+            </button>
+
+            <button type="button" x-show="selectedPhotos.length > 0" @click="openFileSelector"
+                    class="flex items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded">
+                <x-add-icon />
+                <span>Selecionar Mais Fotos</span>
+            </button>
+        </div>
+
 
         <!-- Galeria de Fotos Existentes -->
         <x-input-label for="currentPhotos" value="Fotos Cadastradas"></x-input-label>
@@ -71,12 +81,13 @@
         </div>
 
         <div class="flex justify-end mt-6 gap-2">
-            <form id="" action="" method="POST" class="mt-4">
+            <form id="clearAllPhotosForm" action="{{ route('properties.photos.clear', $property->id) }}" method="POST" class="mt-4">
                 @csrf
+                @method('DELETE')
                 <div class="flex items-center gap-4">
-                    <button type="submit" class="flex items-center bg-red-600 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded">
+                    <button type="submit" @click="confirmClearAllPhotos" class="flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
                         <x-delete-icon color="white"/>
-                        <span>Apagar Todas as Fotos</span>
+                        <span>Limpar Todas as Fotos Cadastradas</span>
                     </button>
                 </div>
             </form>
@@ -85,12 +96,30 @@
     </div>
 
     <script>
+
+        function confirmClearAllPhotos() {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Esta ação irá excluir todas as fotos cadastradas!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('clearAllPhotosForm').submit();
+                }
+            });
+        }
+
+
         function photoManager() {
             return {
                 selectedPhotos: [],
                 isSelectingFiles: false,
 
-                // Abrir seletor de arquivos
                 openFileSelector() {
                     if (!this.isSelectingFiles) {
                         this.isSelectingFiles = true;
@@ -98,7 +127,6 @@
                     }
                 },
 
-                // Manipular arquivos selecionados
                 handleFiles(event) {
                     const files = event.target.files;
                     for (let i = 0; i < files.length; i++) {
@@ -109,18 +137,37 @@
                     }, 500);
                 },
 
-                // Remover foto selecionada
                 removePhoto(index) {
                     this.selectedPhotos.splice(index, 1);
                 },
 
-                // Fechar modal e limpar seleção
+                clearSelectedPhotos() {
+                    Swal.fire({
+                        title: 'Você tem certeza?',
+                        text: "Esta ação irá limpar todas as fotos selecionadas!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim, limpar!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.selectedPhotos = [];
+                            Swal.fire(
+                                'Limpo!',
+                                'As fotos selecionadas foram limpas.',
+                                'success'
+                            );
+                        }
+                    });
+                },
+
                 closeModal() {
                     this.selectedPhotos = [];
                     this.$dispatch('close-modal', 'editPhotosModal{{ $property->id }}');
                 },
 
-                // Confirmar exclusão de foto
                 confirmDelete(photoId) {
                     Swal.fire({
                         title: 'Você tem certeza?',
@@ -139,6 +186,7 @@
                 },
             };
         }
+
 
     </script>
 </x-modal>

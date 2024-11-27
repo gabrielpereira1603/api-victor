@@ -21,7 +21,6 @@ class PropertyImageController extends Controller
             return back()->withErrors(['photos' => 'Nenhuma foto foi enviada.']);
         }
 
-        // Validação
         $validator = Validator::make($request->all(), [
             'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -31,14 +30,12 @@ class PropertyImageController extends Controller
             return redirect()->route('properties')->withErrors($validator)->withInput();
         }
 
-        // Verificando se a propriedade existe
         $property = Property::find($propertyId);
         if (!$property) {
             Log::error('Propriedade não encontrada.', ['property_id' => $propertyId]);
             return redirect()->route('properties')->withErrors(['property' => 'Propriedade não encontrada.']);
         }
 
-        // Verificando envio de arquivos
         if ($request->hasFile('photos')) {
             Log::info('Fotos recebidas.', ['files' => $request->file('photos')]);
 
@@ -76,7 +73,6 @@ class PropertyImageController extends Controller
             return redirect()->route('properties')->withErrors(['photo' => 'Foto não encontrada.']);
         }
 
-        // Removendo arquivo
         $photoPath = str_replace(asset('storage/'), '', $photo->image_url);
         if (Storage::disk('public')->exists($photoPath)) {
             Storage::disk('public')->delete($photoPath);
@@ -85,10 +81,44 @@ class PropertyImageController extends Controller
             Log::warning('Arquivo de foto não encontrado no sistema.', ['path' => $photoPath]);
         }
 
-        // Deletando do banco de dados
         $photo->delete();
         Log::info('Foto removida do banco de dados.', ['photo_id' => $photoId]);
 
         return redirect()->route('properties')->with('success', 'Foto da propriedade excluída com sucesso!');
     }
+
+    public function clearAllPhotos($propertyId)
+    {
+        Log::info('Iniciando método clearAllPhotos para limpar todas as fotos.', ['property_id' => $propertyId]);
+
+        $property = Property::find($propertyId);
+
+        if (!$property) {
+            Log::error('Propriedade não encontrada.', ['property_id' => $propertyId]);
+            return redirect()->route('properties')->withErrors(['property' => 'Propriedade não encontrada.']);
+        }
+
+        $photos = PropertyImage::where('property_id', $propertyId)->get();
+
+        if ($photos->isEmpty()) {
+            Log::warning('Nenhuma foto cadastrada para essa propriedade.', ['property_id' => $propertyId]);
+            return redirect()->route('properties')->with('warning', 'Nenhuma foto cadastrada para essa propriedade.');
+        }
+
+        foreach ($photos as $photo) {
+            $photoPath = str_replace(asset('storage/'), '', $photo->image_url);
+            if (Storage::disk('public')->exists($photoPath)) {
+                Storage::disk('public')->delete($photoPath);
+                Log::info('Arquivo de foto deletado.', ['path' => $photoPath]);
+            } else {
+                Log::warning('Arquivo de foto não encontrado no sistema.', ['path' => $photoPath]);
+            }
+
+            $photo->delete();
+            Log::info('Foto removida do banco de dados.', ['photo_id' => $photo->id]);
+        }
+
+        return redirect()->route('properties')->with('success', 'Todas as fotos foram excluídas com sucesso!');
+    }
+
 }
