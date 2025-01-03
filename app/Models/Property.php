@@ -24,7 +24,11 @@ class Property extends Model
         'land_area',
         'neighborhood_id',
         'city_id',
-        'state_id'
+        'state_id',
+        'written',
+        'ramp',
+        'machine_room',
+        'description'
     ];
 
     protected $dates = ['deleted_at'];

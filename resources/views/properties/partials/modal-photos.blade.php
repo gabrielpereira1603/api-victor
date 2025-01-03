@@ -1,4 +1,4 @@
-<x-modal :name="'editPhotosModal' . $property->id" maxWidth="2xl">
+<x-modal :name="'editPhotosModal' . $property->id" maxWidth="2xl" wire:model="showPhotosModal">
     <div class="p-6 space-y-6" x-data="photoManager()">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Editar Fotos da Propriedade</h2>
 

@@ -15,12 +15,6 @@ use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
-    public function index()
-    {
-        $properties = Property::with(['neighborhood', 'city', 'state', 'images'])->withTrashed()->get();
-        return view('properties', compact('properties'));
-    }
-
     public function indexCreate()
     {
         $properties = Property::with(['neighborhood', 'city', 'state'])->withTrashed()->get();

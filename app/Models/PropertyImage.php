@@ -14,6 +14,8 @@ class PropertyImage extends Model
     protected $fillable = [
         'property_id',
         'image_url',
+        'file_name',
+        'file_type'
     ];
 
     protected $dates = ['deleted_at'];

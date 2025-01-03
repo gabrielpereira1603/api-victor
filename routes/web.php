@@ -4,6 +4,8 @@ use App\Http\Controllers\Web\Property\PropertyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\Property\PropertyImageController;
 use App\Http\Controllers\Web\Property\UpdatePropertyController;
+use App\Livewire\Pages\Properties\CreateProperties;
+use App\Livewire\Pages\Properties\HomeProperties;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +24,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('properties')->middleware('auth')->group(function () {
-    Route::get('/', [PropertyController::class, 'index'])->name('properties');
+    Route::get('/', HomeProperties::class)->name('properties');
+    Route::get('/create', CreateProperties::class)->name('properties.create');
 
-    Route::get('/create', [PropertyController::class, 'indexCreate'])->name('properties.create');
     Route::post('/store', [PropertyController::class, 'store'])->name('properties.store');
+
 
     Route::get('/{property}/update', [UpdatePropertyController::class, 'index'])->name('properties.update');
     Route::patch('/{property}', [UpdatePropertyController::class, 'update'])->name('properties.update.submit');

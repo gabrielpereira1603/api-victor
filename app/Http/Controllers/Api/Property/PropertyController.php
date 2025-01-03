@@ -21,7 +21,7 @@ class PropertyController extends Controller
 
     public function findOneProperties($id)
     {
-        $property = Property::with('images')->findOrFail($id);
+        $property = Property::with(['images', 'neighborhood', 'city', 'state'])->findOrFail($id);
 
         return response()->json($property);
     }
