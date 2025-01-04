@@ -15,7 +15,7 @@ class UploadPhotosPropertyForm extends Form
 {
     use WithFileUploads;
 
-    #[Validate(['photos.*' => 'image|max:2048'])]
+    #[Validate(['photos.*' => 'image|max:204800'])]
     public $photos = [];
 
     public $image_url;
