@@ -2,27 +2,42 @@
 
 namespace App\Livewire\Components\Modals;
 
+use App\Livewire\Forms\UploadPhotosPropertyForm;
 use App\Models\Property;
-use LivewireUI\Modal\ModalComponent;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
-class PropertiesPhotosModal extends ModalComponent
+
+class PropertiesPhotosModal extends Component
 {
     public Property $property;
-    public $photos;
 
-    public static function modalMaxWidth(): string
+    public UploadPhotosPropertyForm $form;
+    public $errorMessage = '';
+    public $validationErrors = [];
+
+    use WithFileUploads;
+
+    public function removePhoto($index)
     {
-        return '2xl'; // Largura máxima do modal
+        // Remover a foto do array de fotos
+        unset($this->form['photos'][$index]);
+
+        // Reindexar o array para garantir que os índices estejam corretos
+        $this->form['photos'] = array_values($this->form['photos']);
     }
 
-    public function mount($property)
+    public function save()
     {
-        $this->property = $property;
-        $this->photos = $this->property->images; // Ou o que for apropriado
+        $this->form->store();
     }
+
     public function render()
     {
-        return view('livewire.components.modals.properties-photos-modal');
+        return view('livewire.components.modals.properties-photos-modal',[
+            'errorMessage' => $this->errorMessage,
+            'validationErrors' => $this->validationErrors,
+        ]);
     }
 }
 

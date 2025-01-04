@@ -1,192 +1,46 @@
 <x-modal :name="'editPhotosModal' . $property->id" maxWidth="2xl">
     <div class="p-6 space-y-6" x-data="photoManager()">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Editar Fotos da Propriedade</h2>
-
+        <x-input-label for="EditPhotos" value="Cadastrar Novas Fotos"></x-input-label>
         <div class="flex justify-between items-center">
-            <x-input-label for="EditPhotos" value="Cadastrar Novas Fotos"></x-input-label>
-            <form id="photoUploadForm" action="{{ route('properties.photos.store', ['property' => $property->id]) }}" method="POST" enctype="multipart/form-data" class="mt-4">
+            <form class="flex flex-col" wire:submit.prevent="save" enctype="multipart/form-data">
                 @csrf
-                <div class="flex items-center gap-4">
-                    <input type="file" name="photos[]" multiple accept="image/*" class="hidden" x-ref="photoUpload" id="photoUpload"
-                           @change="handleFiles">
-                    <button type="submit" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded">
-                        <x-save-icon color="white" />
-                        <span>Salvar Fotos</span>
-                    </button>
+
+                <div class="w-full">
+                    <div class="bg-gray-100 border-2 border-dashed border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg p-6 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <label for="photo" class="cursor-pointer w-full flex flex-col items-center justify-center text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h10a4 4 0 004-4V7a4 4 0 00-4-4H7a4 4 0 00-4 4v8z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10l4 4m0 0l4-4m-4 4V3" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                                {{ __('Arraste ou clique para selecionar uma foto.') }}
+                            </p>
+                        </label>
+                        <input type="file" id="photo" wire:model="form.photos" class="hidden" multiple>
+                        @error('form.photos') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
                 </div>
+
+                @if ($form->photos && is_array($form->photos))
+                    <x-input-label for="selectedPhotos" value="Fotos Selecionadas:" class="mb-3 mt-3"></x-input-label>
+
+                    <div class="flex flex-wrap space-x-4">
+                        @foreach ($form->photos as $index => $photo)
+                            <div class="relative">
+                                <!-- Foto com bordas arredondadas e desfoque -->
+                                <img src="{{ $photo->temporaryUrl() }}" alt="Foto" class="w-20 h-20 object-cover rounded-lg filter">
+
+                                <!-- Botão para remover a foto -->
+                                <button type="button" wire:click="removePhoto({{ $index }})" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    <span class="text-xs">X</span>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </form>
-        </div>
-
-        <template x-if="selectedPhotos.length === 0">
-            <div class="border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg p-6 w-full flex flex-col items-center justify-center text-center cursor-pointer"
-                 @click="openFileSelector">
-                <!-- Ícone e mensagem -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-600 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h10a4 4 0 004-4V7a4 4 0 00-4-4H7a4 4 0 00-4 4v8z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10l4 4m0 0l4-4m-4 4V3" />
-                </svg>
-                <p class="mt-2 text-sm text-gray-900 dark:text-gray-400">Clique aqui para selecionar fotos</p>
-            </div>
-        </template>
-
-
-        <div x-show="selectedPhotos.length > 0" class="grid grid-cols-3 md:grid-cols-3 gap-4 mt-4">
-            <template x-for="(photo, index) in selectedPhotos" :key="index">
-                <div class="relative">
-                    <img :src="photo" alt="Foto selecionada" class="rounded-lg shadow-lg w-full h-full object-cover">
-                    <button type="button" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1"
-                            @click="removePhoto(index)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </template>
-        </div>
-
-
-        <div class="flex gap-x-4 mt-4 gap-2">
-            <button type="button" x-show="selectedPhotos.length > 0" @click="clearSelectedPhotos"
-                    class="flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
-                <x-delete-icon color="white"/>
-                <span>Limpar Fotos Selecionadas</span>
-            </button>
-
-            <button type="button" x-show="selectedPhotos.length > 0" @click="openFileSelector"
-                    class="flex items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded">
-                <x-add-icon />
-                <span>Selecionar Mais Fotos</span>
-            </button>
-        </div>
-
-
-        <!-- Galeria de Fotos Existentes -->
-        <x-input-label for="currentPhotos" value="Fotos Cadastradas"></x-input-label>
-        <div class="grid grid-cols-3 md:grid-cols-3 gap-4">
-            @foreach ($photos as $photo)
-                <div class="relative">
-                    <img src="{{ $photo->image_url }}" alt="Foto da Propriedade" class="rounded-lg shadow-lg w-full h-full object-cover">
-                    <button type="button" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1"
-                            @click.prevent="confirmDelete({{ $photo->id }})">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <form id="delete-photo-{{ $photo->id }}" action="{{ route('properties.photos.destroy', ['photo' => $photo->id]) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="flex justify-end mt-6 gap-2">
-            <form id="clearAllPhotosForm" action="{{ route('properties.photos.clear', $property->id) }}" method="POST" class="mt-4">
-                @csrf
-                @method('DELETE')
-                <div class="flex items-center gap-4">
-                    <button type="submit" @click="confirmClearAllPhotos" class="flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
-                        <x-delete-icon color="white"/>
-                        <span>Limpar Todas as Fotos Cadastradas</span>
-                    </button>
-                </div>
-            </form>
-            <x-primary-button @click="$dispatch('close-modal', 'editPhotosModal{{ $property->id }}')">Fechar</x-primary-button>
         </div>
     </div>
 
-    <script>
-
-        function confirmClearAllPhotos() {
-            Swal.fire({
-                title: 'Tem certeza?',
-                text: "Esta ação irá excluir todas as fotos cadastradas!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sim, excluir!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('clearAllPhotosForm').submit();
-                }
-            });
-        }
-
-
-        function photoManager() {
-            return {
-                selectedPhotos: [],
-                isSelectingFiles: false,
-
-                openFileSelector() {
-                    if (!this.isSelectingFiles) {
-                        this.isSelectingFiles = true;
-                        this.$refs.photoUpload.click();
-                    }
-                },
-
-                handleFiles(event) {
-                    const files = event.target.files;
-                    for (let i = 0; i < files.length; i++) {
-                        this.selectedPhotos.push(URL.createObjectURL(files[i]));
-                    }
-                    setTimeout(() => {
-                        this.isSelectingFiles = false;
-                    }, 500);
-                },
-
-                removePhoto(index) {
-                    this.selectedPhotos.splice(index, 1);
-                },
-
-                clearSelectedPhotos() {
-                    Swal.fire({
-                        title: 'Você tem certeza?',
-                        text: "Esta ação irá limpar todas as fotos selecionadas!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, limpar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.selectedPhotos = [];
-                            Swal.fire(
-                                'Limpo!',
-                                'As fotos selecionadas foram limpas.',
-                                'success'
-                            );
-                        }
-                    });
-                },
-
-                closeModal() {
-                    this.selectedPhotos = [];
-                    this.$dispatch('close-modal', 'editPhotosModal{{ $property->id }}');
-                },
-
-                confirmDelete(photoId) {
-                    Swal.fire({
-                        title: 'Você tem certeza?',
-                        text: "Esta ação não poderá ser desfeita!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim, deletar!',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`delete-photo-${photoId}`).submit();
-                        }
-                    });
-                },
-            };
-        }
-
-
-    </script>
 </x-modal>
