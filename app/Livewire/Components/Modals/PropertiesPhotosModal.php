@@ -52,7 +52,7 @@ class PropertiesPhotosModal extends Component
 
         $this->form->store($this->form->property);
 
-        $this->clearPreviewPhotos();
+        $this->form->photos = [];
     }
 
 
