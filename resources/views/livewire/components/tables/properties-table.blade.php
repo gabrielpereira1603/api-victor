@@ -44,7 +44,7 @@ use Livewire\Volt\Component;
             @foreach ($properties as $property)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {{ '' . $property->id }}
+                        #{{ '' . $property->id }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                         {{ '' . $property->value }}
