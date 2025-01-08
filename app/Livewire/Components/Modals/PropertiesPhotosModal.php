@@ -63,7 +63,6 @@ class PropertiesPhotosModal extends Component
 
     public function render()
     {
-        phpinfo();
         return view('livewire.components.modals.properties-photos-modal',[
             'existingPhotos' => $this->form->property->images
         ]);
