@@ -8,6 +8,7 @@ use Livewire\Component;
 class PropertiesTable extends Component
 {
     public $properties;
+
     public function render()
     {
 

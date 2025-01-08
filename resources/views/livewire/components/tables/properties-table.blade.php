@@ -107,8 +107,7 @@ use Livewire\Volt\Component;
                                         <x-view-icon color="text-blue-500" />
                                         Visualizar
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
-                                                     @click="$dispatch('open-modal', 'editPhotosModal{{ $property->id }}')">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" @click="$dispatch('open-modal', 'editPhotosModal{{ $property->id }}')">
                                         <x-photos-icon color="text-blue-500" />
                                         Editar Fotos
                                     </x-dropdown-link>
@@ -131,7 +130,7 @@ use Livewire\Volt\Component;
                         </x-dropdown>
                     </td>
                 </tr>
-                <livewire:components.modals.properties-photos-modal :property="$property" :photos="$property->images"/>
+                <livewire:components.modals.properties-photos-modal :property="$property" />
                 <livewire:components.modals.view-property-modal :property="$property"/>
             @endforeach
             </tbody>

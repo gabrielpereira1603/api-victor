@@ -2,75 +2,70 @@
 
 namespace App\Livewire\Components\Modals;
 
-use App\Livewire\Forms\UploadPhotosPropertyForm;
+use App\Livewire\Forms\Properties\UploadPhotosPropertyForm;
 use App\Models\Property;
-use App\Models\PropertyImage;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-
 class PropertiesPhotosModal extends Component
 {
-    public Property $property;
-
-    public UploadPhotosPropertyForm $form;
-    public $errorMessage = '';
-    public $validationErrors = [];
-
-    public $existingPhotos = [];
-
-    public $confirmDelete = false;
-
-
     use WithFileUploads;
 
-    public function clearPhotos($index = null)
-    {
-        $this->form->clearPhotos($index);
-    }
+    public UploadPhotosPropertyForm $form;
 
-    public function clearExistingPhoto($id_photo = null)
+    public function clearPreviewPhotos($index = null): void
     {
-        if ($id_photo === null) {
-            if (!$this->confirmDelete) {
-                $this->confirmDelete = true;
-                $this->mount();
-            } else {
-                $this->form->clearAllExistingPhoto($this->property);
-                $this->confirmDelete = false;
-                $this->mount();
+        if(isset($index)){
+            if (isset($this->form->photos[$index])) {
+                unset($this->form->photos[$index]);
+                $this->form->photos = array_values($this->form->photos);
+                session()->flash('success', 'Imagem removida com sucesso.');
             }
         } else {
-            if(!$this->confirmDelete){
-                $this->confirmDelete = true;
-                $this->mount();
-            }else {
-                $this->form->clearExistingPhoto($id_photo);
-                $this->confirmDelete = false;
-                $this->mount();
-            }
+            $this->form->photos = [];
+            session()->flash('success', 'Todas as fotos foram removidas com sucesso.');
         }
+
     }
 
-
-    public function mount()
+    public function clearExistingPhoto($id_photo = null): void
     {
-        $this->existingPhotos = $this->property->images->toArray();
+        if ($id_photo) {
+            $this->form->clearOneExistingPhoto($id_photo);
+            session()->flash('success', 'Fotos cadastradas com sucesso.');
+        } else {
+            $this->form->clearAllExistingPhoto($this->form->property);
+            session()->flash('success', 'Foto excluída com sucesso.');
+        }
+
+        $this->mount($this->form->property);
     }
 
     public function save()
     {
-        $this->form->store($this->property);
-        $this->existingPhotos = $this->property->images->toArray();
-        $this->clearPhotos();
+        // Log para verificar os arquivos recebidos
+        Log::info('Arquivos recebidos:', [
+            'quantidade' => count($this->form->photos),
+            'tamanho_total' => array_sum(array_map(fn ($photo) => $photo->getSize(), $this->form->photos)) / 1024 . ' KB',
+        ]);
+
+        $this->form->store($this->form->property);
+
+        $this->clearPreviewPhotos();
+    }
+
+
+    public function mount(Property $property)
+    {
+        $this->form->property = $property;
     }
 
     public function render()
     {
+        phpinfo();
         return view('livewire.components.modals.properties-photos-modal',[
-            'errorMessage' => $this->errorMessage,
-            'validationErrors' => $this->validationErrors,
+            'existingPhotos' => $this->form->property->images
         ]);
     }
 }
-

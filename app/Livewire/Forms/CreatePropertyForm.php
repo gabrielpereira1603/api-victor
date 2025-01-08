@@ -68,8 +68,8 @@ class CreatePropertyForm extends Form
 
     #[Validate('required|string|max:255')]
     public $description;
-    public $photo_url;
 
+    public $photo_url;
     public $file_name;
     public $file_type;
 
