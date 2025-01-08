@@ -31,6 +31,7 @@
         <form class="flex flex-col" wire:submit.prevent="save" enctype="multipart/form-data">
             @error('form.photos') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
+            <!-- Input de Upload -->
             <div class="w-full mb-2">
                 <div class="bg-gray-100 border-2 border-dashed border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg p-6 transition hover:bg-gray-50 dark:hover:bg-gray-800">
                     <label for="file-upload-{{ $form->property->id }}" class="cursor-pointer flex flex-col items-center justify-center">
@@ -43,6 +44,14 @@
                     </label>
                     <input id="file-upload-{{ $form->property->id }}" type="file" wire:model="form.photos" multiple class="hidden">
                 </div>
+            </div>
+
+            <!-- Barra de Progresso -->
+            <div wire:loading wire:target="form.photos" class="relative mt-4 w-full">
+                <div class="w-full bg-gray-300 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                </div>
+                <p class="text-gray-500 text-sm mt-1">Carregando imagens...</p>
             </div>
 
             @if ($form->photos)
@@ -65,14 +74,17 @@
                 <div class="flex flex-row w-full gap-4">
                     <button
                         wire:click="clearPreviewPhotos()"
-                        wire:confirm="Você deseja remover todas as fotos selecionadas?"
+                        wire:loading.attr="disabled"
                         type="button"
                         class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded flex items-center justify-center flex-1">
                         <x-delete-icon width="16px" height="16px" color="white" />
                         Limpar Todas
                     </button>
 
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded flex items-center justify-center flex-1 gap-1">
+                    <button
+                        type="submit"
+                        wire:loading.attr="disabled"
+                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded flex items-center justify-center flex-1 gap-1">
                         <x-save-icon width="16px" height="16px" color="white"/>
                         Salvar
                     </button>
