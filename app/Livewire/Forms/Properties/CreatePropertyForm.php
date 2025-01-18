@@ -66,7 +66,7 @@ class CreatePropertyForm extends Form
     #[Validate('required|string|max:122')]
     public $state;
 
-    #[Validate('required|string|max:255')]
+    #[Validate('required|string|max:1000')]
     public $description;
 
     #[Validate('nullable|string')]

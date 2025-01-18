@@ -22,7 +22,7 @@
                         {{ __('Propriedades') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('home.manage')" :active="request()->routeIs('home.manage*')">
+                    <x-nav-link :href="route('home.manage')" :active="request()->is('manage*')">
                         <x-config-icon widht="14px" height="14px" color="currentColor"/>
                         {{ __('Configurações') }}
                     </x-nav-link>
@@ -85,14 +85,14 @@
                 {{ __('Início') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('properties')" :active="request()->routeIs('properties*')"
+            <x-responsive-nav-link :href="route('home.manage')" :active="request()->is('manage*')"
                                    class="flex items-center gap-1"
             >
                 <x-house-icon widht="18px" height="18px" color="currentColor"/>
                 {{ __('Propiedades') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('home.manage')" :active="request()->routeIs('home.manage*')"
+            <x-responsive-nav-link :href="route('home.manage')" :active="request()->routeIs('manage*')"
                                    class="flex items-center gap-1"
             >
                 <x-config-icon widht="18px" height="18px" color="currentColor"/>

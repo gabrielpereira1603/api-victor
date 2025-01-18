@@ -31,7 +31,6 @@ class UploadPhotosPropertyForm extends Form
                     $fileName = $photo->getClientOriginalName();
                     $path = $photo->storeAs('properties_images', $fileName, 'public');
 
-                    // Definindo o URL e outros dados
                     $this->image_url = asset('storage/' . $path);
                     $this->file_name = $fileName;
                     $this->file_type = $photo->getClientMimeType();
