@@ -28,10 +28,19 @@ class Property extends Model
         'written',
         'ramp',
         'machine_room',
-        'description'
+        'description',
+        'file_name',
+        'file_type',
+        'maps',
+        'type_property_id',
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function typeProperty()
+    {
+        return $this->belongsTo(TypeProperty::class);
+    }
 
     public function neighborhood()
     {

@@ -2,17 +2,22 @@
 
 namespace App\Livewire\Pages\Properties;
 
-use App\Livewire\Forms\CreatePropertyForm;
+use App\Livewire\Forms\Properties\CreatePropertyForm;
+use App\Models\TypeProperty;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class CreateProperties extends Component
 {
     public CreatePropertyForm $form;
-    public $errorMessage = '';
-    public $validationErrors = [];
 
     use WithFileUploads;
+    public $typeProperties;
+
+    public function mount()
+    {
+        $this->typeProperties = TypeProperty::all();
+    }
 
     public function save()
     {
@@ -26,11 +31,9 @@ class CreateProperties extends Component
             throw $e;
         }
     }
+
     public function render()
     {
-        return view('livewire.pages.properties.create-properties', [
-            'errorMessage' => $this->errorMessage,
-            'validationErrors' => $this->validationErrors,
-        ])->layout('layouts.app');
+        return view('livewire.pages.properties.create-properties')->layout('layouts.app');
     }
 }

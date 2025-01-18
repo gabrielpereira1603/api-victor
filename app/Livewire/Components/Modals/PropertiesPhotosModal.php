@@ -44,17 +44,10 @@ class PropertiesPhotosModal extends Component
 
     public function save()
     {
-        // Log para verificar os arquivos recebidos
-        Log::info('Arquivos recebidos:', [
-            'quantidade' => count($this->form->photos),
-            'tamanho_total' => array_sum(array_map(fn ($photo) => $photo->getSize(), $this->form->photos)) / 1024 . ' KB',
-        ]);
-
         $this->form->store($this->form->property);
 
         $this->form->photos = [];
     }
-
 
     public function mount(Property $property)
     {

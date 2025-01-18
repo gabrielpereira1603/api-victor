@@ -1,37 +1,45 @@
 <div>
     <x-slot name="header">
         <h2 class="flex gap-1 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-house-add-icon width="20px" height="20px" color="currentColor"/>
-            {{ __('Cadastrar Propriedade') }}
+            <x-edit-icon width="20px" height="20px" color="currentColor"/>
+            {{ __('Editar Propriedade') }}
         </h2>
     </x-slot>
-    <livewire:breadcrumb />
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-
-                <form wire:submit.prevent="save" enctype="multipart/form-data" class="space-y-8">
+            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 space-y-6">
+                <form wire:submit.prevent="save" enctype="multipart/form-data" class="space-y-5">
                     @csrf
                     @script
-                        <script>
-                            $wire.on('validationFailed', () => {
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Erro na validação',
-                                    text: 'Por favor, revise os campos destacados no formulário!',
-                                    confirmButtonColor: '#dc3545',
-                                });
+                    <script>
+                        $wire.on('validationFailed', () => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro na validação',
+                                text: 'Por favor, revise os campos destacados no formulário!',
+                                confirmButtonColor: '#dc3545',
                             });
-                        </script>
+                        });
+                    </script>
                     @endscript
+                    @if ($errors->any())
+                        <div class="bg-red-500 text-white p-4 rounded-md">
+                            <p><strong>Por favor, corrija os erros abaixo:</strong></p>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <h2 class="flex gap-1 items-start sm:items-center font-semibold text-lg text-gray-800 dark:text-gray-200">
                         <x-info-icon width="20px" height="20px" color="currentColor"/>
                         {{ __('Os campos sem "*" são opcionais.') }}
                     </h2>
 
-                    <!-- Upload e Pré-visualização da Imagem -->
                     <div class="space-y-4">
                         <div class="bg-gray-100 border-2 border-dashed border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg p-6 flex flex-col items-center justify-center text-center transition hover:bg-gray-50 dark:hover:bg-gray-800">
                             <label for="photo" class="cursor-pointer w-full flex flex-col items-center justify-center text-center">
@@ -40,38 +48,62 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10l4 4m0 0l4-4m-4 4V3" />
                                 </svg>
                                 <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                                    {{ __('Arraste ou clique para selecionar uma foto.') }}
+                                    {{ __('Clique para alterar a foto cadastrada!') }}
                                 </p>
                             </label>
-                            <input type="file" id="photo" wire:model.blur="form.photo" class="hidden">
-                            @error('form.photo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            <input type="file" id="photo" wire:model.blur="form.new_photo" class="hidden">
+                            @error('form.new_photo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
+                    </div>
 
-                        @if ($form->photo)
-                            <div class="flex flex-col items-center gap-4">
-                                @error('form.photo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <div class="relative">
-                                    <img src="{{ $form->photo->temporaryUrl() }}"
+                    <div class="flex justify-start items-center gap-12">
+                        <!-- Imagem Atual -->
+                        <div class="flex flex-col items-center">
+                            <h2 class="flex items-center font-semibold text-lg text-gray-800 dark:text-gray-200 mb-2">
+                                <x-photos-icon color="currentColor" />
+                                {{ __('Imagem Atual') }}
+                            </h2>
+                            @if ($property->photo_url)
+                                <div class="relative w-36 h-36">
+                                    <img src="{{ $property->photo_url }}"
                                          alt="Foto selecionada"
-                                         class="w-36 h-36 rounded-lg shadow-md">
+                                         class="w-full h-full object-cover rounded-lg shadow-md">
                                     <button type="button" wire:click="clearPhoto"
-                                            class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                 </div>
-                                <span class="flex items-center justify-center gap-1">
-                                    <strong class="text-gray-600 dark:text-gray-400">
-                                        Imagem Selecionada:
-                                    </strong>
-                                    <p class="text-blue-300 underline cursor-pointer">
-                                        {{ $form->photo->getClientOriginalName() }}
-                                    </p>
-                                </span>
-                            </div>
-                        @endif
+                            @else
+                                <p class="text-gray-500 text-center">Nenhuma imagem cadastrada.</p>
+                            @endif
+                        </div>
+
+                        <!-- Nova Imagem Selecionada -->
+                        <div class="flex flex-col items-center">
+                            <h2 class="flex items-center font-semibold text-lg text-gray-800 dark:text-gray-200 mb-2">
+                                <x-photos-icon color="currentColor" />
+                                {{ __('Nova imagem selecionada') }}
+                            </h2>
+                            @if ($form->new_photo)
+                                <div class="relative w-36 h-36">
+                                    <img src="{{ $form->new_photo->temporaryUrl() }}"
+                                         alt="Foto selecionada"
+                                         class="w-full h-full object-cover rounded-lg shadow-md">
+                                    <button type="button"
+                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            @else
+                                <p class="text-gray-500 text-center">Nenhuma nova imagem selecionada.</p>
+                            @endif
+                        </div>
                     </div>
+
 
                     <!-- Campos do Formulário -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -144,37 +176,35 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Link do Mapa -->
                         <div>
-                            <x-input-label for="maps" value="Link do Mapa" />
+                            <x-input-label for="maps" value="Link do Mapa"/>
                             <x-text-input
                                 name="maps"
                                 wire:model.blur="form.maps"
                                 id="maps"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            />
+                                rows="5"
+                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            </x-text-input>
                         </div>
 
                         <div>
-                            <x-input-label for="type_property" value="Tipo de Propriedade*" />
+                            <x-input-label for="type_property" value="Tipo de Propriedade" />
                             <select
                                 id="type_property"
-                                wire:model.defer="form.type_property"
+                                wire:model.blur="form.type_property"
                                 class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             >
                                 <option value="">Selecione um tipo</option>
                                 @foreach ($typeProperties as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    <option value="{{ $type->id }}" {{ $form->type_property == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
                                 @endforeach
                             </select>
-                            @error('form.type_property')
-                            <span class="text-sm text-red-500">{{ $message }}</span>
-                            @enderror
+                            @error('type_property') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
-
-                    <!-- Campo de Descrição -->
                     <div>
                         <x-input-label for="description" value="Descrição Adicional" />
                         <x-text-area
@@ -186,16 +216,17 @@
                         </x-text-area>
                     </div>
 
-                    <!-- Botões -->
+
+                    <!-- Botão Salvar -->
                     <div class="flex justify-end gap-4">
                         <x-cancel-button onclick="window.location.href='{{ route('properties') }}'" class="flex gap-2 items-center">
                             <x-cancel-icon width="20px" height="20px" color="currentColor" />
-                            {{ __('Voltar') }}
+                            {{ __('Cancelar Alterações') }}
                         </x-cancel-button>
 
                         <x-primary-button type="submit" wire:target="save" class="flex gap-2 items-center">
                             <x-save-icon width="20px" height="20px" color="currentColor" />
-                            {{ __('Salvar Propriedade') }}
+                            {{ __('Salvar Alterações') }}
                         </x-primary-button>
                     </div>
                 </form>
@@ -255,5 +286,4 @@
             });
         });
     </script>
-
 </div>

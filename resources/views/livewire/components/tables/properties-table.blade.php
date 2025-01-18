@@ -117,7 +117,7 @@ use Livewire\Volt\Component;
                                         <x-photos-icon color="text-blue-500" />
                                         Editar Fotos
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('properties.update', ['property' => $property->id]) }}" class="flex items-center">
+                                    <x-dropdown-link href="{{ route('properties.update', ['property_id' => $property->id]) }}" class="flex items-center">
                                         <x-edit-icon color="text-amber-500" />
                                         Editar
                                     </x-dropdown-link>
@@ -141,6 +141,10 @@ use Livewire\Volt\Component;
             @endforeach
             </tbody>
         </table>
+    </div>
+
+    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        {{ $properties->links() }}
     </div>
 
 </div>

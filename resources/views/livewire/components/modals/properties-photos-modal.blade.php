@@ -84,9 +84,17 @@
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
+                        wire:target="save"
                         class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded flex items-center justify-center flex-1 gap-1">
                         <x-save-icon width="16px" height="16px" color="white"/>
-                        Salvar
+                        <span wire:loading.remove wire:target="save">Salvar</span>
+                        <span wire:loading wire:target="save" class="flex items-center gap-2">
+                            <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8v-8H4z"></path>
+                            </svg>
+                            Carregando...
+                        </span>
                     </button>
                 </div>
             @endif
@@ -99,7 +107,7 @@
         @if (count($existingPhotos) > 0)
             <form class="flex flex-col">
                 <x-input-label for="EditExistingPhotos" value="Editar fotos cadastradas"></x-input-label>
-                <div class="flex flex-wrap gap-4 w-full mt-2">
+                <div class="flex flex-wrap gap-4 w-full mt-2 mb-5">
                     @foreach($existingPhotos as $photo)
                         <div class="relative">
                             <img src="{{ $photo['image_url'] }}" alt="Foto cadastrada" class="w-20 h-20 object-cover rounded-lg border border-gray-300 shadow-md">
@@ -113,13 +121,22 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="flex flex-row w-full gap-4">
-                    <button type="button"
-                            wire:confirm="Voçe deseja remover todas as fotos cadastradas?"
-                            wire:click="clearExistingPhoto"
-                            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded flex items-center">
+                <div class="flex items-center justify-center w-full mt-5">
+                    <button
+                        type="button"
+                        wire:loading.attr="disabled"
+                        wire:target="clearExistingPhoto"
+                        wire:click="clearExistingPhoto"
+                        class="w-full text-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded flex items-center justify-center gap-2">
                         <x-delete-icon width="16px" height="16px" color="white" />
-                        <span>Limpar Todas Imagens Cadastradas</span>
+                        <span wire:loading.remove wire:target="clearExistingPhoto">Limpar Todas Imagens Cadastradas</span>
+                        <span wire:loading wire:target="clearExistingPhoto" class="flex items-center gap-2">
+                            <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8v-8H4z"></path>
+                            </svg>
+                            Carregando...
+                        </span>
                     </button>
                 </div>
 
