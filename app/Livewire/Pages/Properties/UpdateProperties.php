@@ -44,31 +44,17 @@ class UpdateProperties extends Component
     public function save()
     {
         try {
-            Log::info('Iniciando o processo de atualização da propriedade.', [
-                'property_id' => $this->form->property->id,
-                'type_property_id' => $this->form->type_property,
-            ]);
 
             $this->form->update();
 
             $this->dispatch('propertyUpdated', ['message' => 'Propriedade atualizada com sucesso!']);
             session()->flash('success', 'Propriedade salva com sucesso!');
 
-            Log::info('Propriedade atualizada com sucesso.');
-
             return $this->redirect('/properties');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::warning('Erro de validação durante a atualização.', [
-                'errors' => $e->errors(),
-            ]);
-
             $this->dispatch('validationFailed');
             throw $e;
         } catch (\Exception $e) {
-            Log::error('Erro ao salvar a propriedade.', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
             throw $e;
         }
     }

@@ -245,12 +245,6 @@
                 $(this).val(value === '' ? '' : parseFloat(value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
             });
 
-            // Remover máscara e formatar o valor para envio
-            $('form').on('submit', function () {
-                var rawValue = $('#value').val().replace(/\D/g, ''); // Remove qualquer coisa que não seja número
-                $('#value').val(rawValue === '' ? '' : (parseFloat(rawValue) / 100).toFixed(2)); // Converte para o formato adequado
-            });
-
             // Máscara para o campo de área construída (m²)
             $('#built_area').mask('000.000,00', { reverse: true }).on('blur', function() {
                 var value = $(this).val().replace(/\D/g, '');
@@ -270,7 +264,7 @@
                 var value = $(this).val().replace(/\D/g, '');
                 if (value !== '') {
                     var formattedValue = (parseInt(value) / 100).toLocaleString('pt-BR', {
-                        minimumFractionDigits: 2,
+                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
                     $(this).val(formattedValue + ' m²');
@@ -279,11 +273,6 @@
                 }
             });
 
-            // Remover máscara e formatar o valor para envio
-            $('form').on('submit', function () {
-                var rawValue = $('#value').val().replace(/\D/g, '');
-                $('#value').val(rawValue === '' ? '' : (parseFloat(rawValue) / 100).toFixed(2));
-            });
         });
     </script>
 </div>
