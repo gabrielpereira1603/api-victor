@@ -134,11 +134,10 @@ class UpdatePropertyForm extends Form
                     'city_id' => $this->city->id,
                 ]
             );
-            $value = (float) str_replace(',', '.', str_replace('.', '', $this->value)); // Remove "." de milhar e troca "," por "."
-            dd('value replace:'.$value,'value digitado:'.$this->value);
-
+            $this->value = trim($this->value);
+            $this->value = str_replace(["R$", ".", ","], ["", "", "."], $this->value);
             $this->property->update([
-                'value' => $value,
+                'value' => $this->value,
                 'built_area' => $this->built_area,
                 'land_area' => $this->land_area,
                 'bedrooms' => $this->bedrooms,

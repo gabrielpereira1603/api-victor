@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Livewire\Pages\Properties;
 
 use App\Livewire\Forms\Properties\UpdatePropertyForm;
 use App\Models\Property;
-
 use App\Models\TypeProperty;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -20,9 +18,9 @@ class UpdateProperties extends Component
     {
         $this->form->property = Property::with('images', 'state', 'city', 'neighborhood', 'typeProperty')->findOrFail($property_id);
 
-        $this->form->value = $this->form->property->value ?? '';
-        $this->form->built_area = $this->form->property->built_area ?? '';
-        $this->form->land_area = $this->form->property->land_area ?? '';
+        $this->form->value = number_format($this->form->property->value, 2, ',', '.');
+        $this->form->built_area = $this->form->property->built_area;
+        $this->form->land_area = $this->form->property->land_area;
         $this->form->bedrooms = $this->form->property->bedrooms ?? 0;
         $this->form->bathrooms = $this->form->property->bathrooms ?? 0;
         $this->form->suites = $this->form->property->suites ?? 0;
@@ -44,7 +42,6 @@ class UpdateProperties extends Component
     public function save()
     {
         try {
-
             $this->form->update();
 
             $this->dispatch('propertyUpdated', ['message' => 'Propriedade atualizada com sucesso!']);
@@ -58,7 +55,6 @@ class UpdateProperties extends Component
             throw $e;
         }
     }
-
 
     public function render()
     {
