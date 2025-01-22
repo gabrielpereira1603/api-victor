@@ -86,32 +86,30 @@ class CreatePropertyForm extends Form
         try {
             $this->validate();
 
-            $this->value = str_replace(['.', ','], ['', '.'], $this->value);
-            $this->value = (float) $this->value;
+            $this->value = trim($this->value);
+            $this->value = str_replace(["R$", ".", ","], ["", "", "."], $this->value);
+
 
             $this->photo_url = asset('storage/' . $this->photo->store('properties_images', 'public'));
             $this->file_name = $this->photo->getClientOriginalName();
             $this->file_type = $this->photo->getClientMimeType();
 
             $this->state = State::firstOrCreate(
-                ['slug' => Str::slug($this->state),
-                    'name' => $this->state]
+                ['slug' => Str::slug($this->state)],
+                ['name' => $this->state]
             );
 
             $this->city = City::firstOrCreate(
                 [
                     'slug' => Str::slug($this->city),
-                    'name' => $this->city,
-                    'state_id' => $this->state->id
-                ]
+                    'state_id' => $this->state->id,
+                ],
+                ['name' => $this->city]
             );
 
             $this->neighborhood = Neighborhood::firstOrCreate(
-                [
-                    'slug' => Str::slug($this->neighborhood),
-                    'name' => $this->neighborhood,
-                    'city_id' => $this->city->id
-                ]
+                ['slug' => Str::slug($this->neighborhood)],
+                ['name' => $this->neighborhood, 'city_id' => $this->city->id]
             );
 
             Property::create([
@@ -139,10 +137,10 @@ class CreatePropertyForm extends Form
             ]);
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
+
 }

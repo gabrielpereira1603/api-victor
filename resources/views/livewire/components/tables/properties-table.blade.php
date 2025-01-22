@@ -1,13 +1,5 @@
-<?php
-use Livewire\Volt\Component;
-
-    new class extends Component{
-      public $modal = false;
-      public $properties;
-    };
-?>
 <div>
-    <div class="overflow-x p-6">
+    <div class="overflow-auto p-6">
         <table class="min-w-full bg-white dark:bg-gray-800">
             <thead>
             <tr>
@@ -42,18 +34,18 @@ use Livewire\Volt\Component;
             </thead>
             <tbody class="bg-white overflow-visible divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-600">
             @foreach ($properties as $property)
-                <tr>
+                <tr wire:key="property-{{ $property->id }}">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                        #{{ '' . $property->id }}
+                        #{{ $property->id }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {{ '' . $property->value }}
+                        R$ {{ number_format($property->value, 2, ',', '.') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                        {{ $property->built_area }}
+                        {{ $property->built_area }} m²
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                        {{ $property->land_area }}
+                        {{ $property->land_area }} m²
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                         {{ $property->neighborhood->name ?? 'N/A' }}
@@ -67,12 +59,12 @@ use Livewire\Volt\Component;
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         @if ($property->trashed())
                             <span class="inline-flex items-center px-3 py-1 text-xs font-semibold text-red-700 border border-red-300 bg-red-50 rounded-full">
-                                        Desativado
-                                    </span>
+                                Desativado
+                            </span>
                         @else
                             <span class="inline-flex items-center px-3 py-1 text-xs font-semibold text-green-700 border border-green-300 bg-green-50 rounded-full">
-                                            Ativado
-                                        </span>
+                                Ativado
+                            </span>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium overflow-ellipsis">
@@ -82,22 +74,19 @@ use Livewire\Volt\Component;
                                     Ações
                                 </button>
                             </x-slot>
-
                             <x-slot name="content">
                                 @if ($property->trashed())
                                     <!-- Ações para propriedades desativadas -->
-                                    <x-dropdown-link href="{{ route('properties.restore', $property->id) }}" class="flex items-center"
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
                                                      onclick="event.preventDefault(); document.getElementById('restore-property-{{ $property->id }}').submit();">
                                         <x-restore-icon color="text-green-500" />
                                         Reativar
                                     </x-dropdown-link>
-
-                                    <x-dropdown-link href="{{ route('properties.forceDelete', $property->id) }}" class="flex items-center"
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
                                                      onclick="event.preventDefault(); document.getElementById('force-delete-property-{{ $property->id }}').submit();">
                                         <x-delete-icon color="text-red-500" />
                                         Excluir
                                     </x-dropdown-link>
-
                                     <form id="restore-property-{{ $property->id }}" action="{{ route('properties.restore', $property->id) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('PATCH')
@@ -113,7 +102,8 @@ use Livewire\Volt\Component;
                                         <x-view-icon color="text-blue-500" />
                                         Visualizar
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" @click="$dispatch('open-modal', 'editPhotosModal{{ $property->id }}')">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
+                                                     @click="$dispatch('open-modal', 'editPhotosModal{{ $property->id }}')">
                                         <x-photos-icon color="text-blue-500" />
                                         Editar Fotos
                                     </x-dropdown-link>
@@ -121,12 +111,11 @@ use Livewire\Volt\Component;
                                         <x-edit-icon color="text-amber-500" />
                                         Editar
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('properties.disable', $property->id) }}" class="flex items-center"
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
                                                      onclick="event.preventDefault(); document.getElementById('disable-property-{{ $property->id }}').submit();">
                                         <x-delete-icon color="text-red-500" />
                                         Desativar
                                     </x-dropdown-link>
-
                                     <form id="disable-property-{{ $property->id }}" action="{{ route('properties.disable', $property->id) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('PATCH')
@@ -136,15 +125,14 @@ use Livewire\Volt\Component;
                         </x-dropdown>
                     </td>
                 </tr>
-                <livewire:components.modals.properties-photos-modal :property="$property" />
-                <livewire:components.modals.view-property-modal :property="$property"/>
+                <!-- Modais -->
+                <livewire:components.modals.view-property-modal :property="$property" wire:key="view-property-modal-{{ $property->id }}" />
+                <livewire:components.modals.properties-photos-modal :property="$property" wire:key="photos-property-modal-{{ $property->id }}" />
             @endforeach
             </tbody>
         </table>
     </div>
-
     <div class="p-4 border-t border-gray-200 dark:border-gray-700">
         {{ $properties->links() }}
     </div>
-
 </div>

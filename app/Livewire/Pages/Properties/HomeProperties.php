@@ -34,10 +34,11 @@ class HomeProperties extends Component
 
     public function render()
     {
-        $this->properties = Property::with(['neighborhood', 'city', 'state', 'images'])->withTrashed()->get();
-
-        return view('livewire.pages.properties.home-properties',[
-            'properties' => $this->properties
+        return view('livewire.pages.properties.home-properties', [
+            'properties' => Property::with(['neighborhood', 'city', 'state', 'images'])
+                ->withTrashed()
+                ->paginate(10),
         ])->layout('layouts.app');
     }
+
 }

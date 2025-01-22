@@ -78,17 +78,17 @@
                         <div>
                             <x-input-label for="value" value="Valor*" />
                             @error('form.value') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            <x-text-input type="text" name="value" wire:model.blur="form.value" id="value" class="w-full" />
+                            <x-text-input type="text" name="value" wire:model.blur="form.value" id="value" class="w-full" oninput="applyCurrencyMask(this)" />
                         </div>
                         <div>
                             <x-input-label for="built_area" value="Área Construída*" />
                             @error('form.built_area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            <x-text-input type="text" name="built_area" wire:model.blur="form.built_area" id="built_area" class="w-full" />
+                            <x-text-input type="text" name="built_area" wire:model.blur="form.built_area" id="built_area" class="w-full" oninput="applyAreaMask(this)" />
                         </div>
                         <div>
                             <x-input-label for="land_area" value="Área do Terreno*" />
                             @error('form.land_area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            <x-text-input type="text" name="land_area" wire:model.blur="form.land_area" id="land_area" class="w-full" />
+                            <x-text-input type="text" name="land_area" wire:model.blur="form.land_area" id="land_area" class="w-full" oninput="applyAreaMask(this)" />
                         </div>
                         <div>
                             <x-input-label for="bedrooms" value="Quartos" />
@@ -207,53 +207,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            // Máscara para o campo de valor
-            $('#value').mask('000.000.000.000.000,00', { reverse: true }).on('blur', function() {
-                var value = $(this).val().replace(/\D/g, '');
-                $(this).val(value === '' ? '' : parseFloat(value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-            });
+        // Máscara para moeda (R$)
+        function applyCurrencyMask(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+            value = (value / 100).toFixed(2) + ''; // Converte para decimal com 2 casas
+            value = value.replace('.', ','); // Troca o ponto por vírgula
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Adiciona os pontos para milhares
+            input.value = 'R$ ' + value; // Adiciona o símbolo de Real
+        }
 
-            // Remover máscara e formatar o valor para envio
-            $('form').on('submit', function () {
-                var rawValue = $('#value').val().replace(/\D/g, ''); // Remove qualquer coisa que não seja número
-                $('#value').val(rawValue === '' ? '' : (parseFloat(rawValue) / 100).toFixed(2)); // Converte para o formato adequado
-            });
+        // Máscara para área (m²) com formato 150,00 m²
+        function applyAreaMask(input) {
+            let value = input.value.replace(/[^\d]/g, ''); // Remove tudo que não for número
 
-            // Máscara para o campo de área construída (m²)
-            $('#built_area').mask('000.000,00', { reverse: true }).on('blur', function() {
-                var value = $(this).val().replace(/\D/g, '');
-                if (value !== '') {
-                    var formattedValue = (parseInt(value) / 100).toLocaleString('pt-BR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    $(this).val(formattedValue + ' m²');
-                } else {
-                    $(this).val('');
-                }
-            });
+            // Verifica se o campo está vazio
+            if (value === '') {
+                input.value = '0,00 m²'; // Define um valor padrão quando vazio
+                return;
+            }
 
-            // Máscara para o campo de área do terreno (m²)
-            $('#land_area').mask('000.000,00', { reverse: true }).on('blur', function() {
-                var value = $(this).val().replace(/\D/g, '');
-                if (value !== '') {
-                    var formattedValue = (parseInt(value) / 100).toLocaleString('pt-BR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    $(this).val(formattedValue + ' m²');
-                } else {
-                    $(this).val('');
-                }
-            });
+            // Converte o valor para decimal com 2 casas e adiciona o sufixo "m²"
+            value = (value / 100).toFixed(2).replace('.', ',');
+            input.value = value + ' m²';
+        }
 
-            // Remover máscara e formatar o valor para envio
-            $('form').on('submit', function () {
-                var rawValue = $('#value').val().replace(/\D/g, '');
-                $('#value').val(rawValue === '' ? '' : (parseFloat(rawValue) / 100).toFixed(2));
-            });
+        // Adiciona os eventos de entrada e blur
+        document.addEventListener('DOMContentLoaded', () => {
+            const valueInput = document.getElementById('value');
+            const builtAreaInput = document.getElementById('built_area');
+            const landAreaInput = document.getElementById('land_area');
+
+            // Aplica a máscara inicialmente
+            if (valueInput) applyCurrencyMask(valueInput);
+            if (builtAreaInput) applyAreaMask(builtAreaInput);
+            if (landAreaInput) applyAreaMask(landAreaInput);
+
+            // Reaplica a máscara ao digitar
+            if (builtAreaInput) {
+                builtAreaInput.addEventListener('input', () => applyAreaMask(builtAreaInput));
+            }
+            if (landAreaInput) {
+                landAreaInput.addEventListener('input', () => applyAreaMask(landAreaInput));
+            }
         });
     </script>
+
 
 </div>
