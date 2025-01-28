@@ -7,7 +7,28 @@ use Livewire\Volt\Component;
     };
 ?>
 <div>
-    <div class="overflow-x p-6">
+    <div class="overflow-auto p-6">
+        <div class="mt-2 mb-2">
+            @if (session()->has('success'))
+                <div x-data="{ show: true }"
+                     x-show="show"
+                     x-init="setTimeout(() => show = false, 5000)"
+                     x-transition:enter="transition-opacity ease-in duration-1000"
+                     x-transition:leave="transition-opacity ease-out duration-1000"
+                     class="bg-green-500 text-white p-2 rounded mb-4 opacity-100">
+                    {{ session('success') }}
+                </div>
+            @elseif(session()->has('error'))
+                <div x-data="{ show: true }"
+                     x-show="show"
+                     x-init="setTimeout(() => show = false, 5000)"
+                     x-transition:enter="transition-opacity ease-in duration-1000"
+                     x-transition:leave="transition-opacity ease-out duration-1000"
+                     class="bg-red-500 text-white p-2 rounded mb-4 opacity-100">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </div>
         <table class="min-w-full bg-white dark:bg-gray-800">
             <thead>
             <tr>
@@ -86,26 +107,15 @@ use Livewire\Volt\Component;
                             <x-slot name="content">
                                 @if ($property->trashed())
                                     <!-- Ações para propriedades desativadas -->
-                                    <x-dropdown-link href="{{ route('properties.restore', $property->id) }}" class="flex items-center"
-                                                     onclick="event.preventDefault(); document.getElementById('restore-property-{{ $property->id }}').submit();">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="restoreProperty({{ $property->id }})">
                                         <x-restore-icon color="text-green-500" />
                                         Reativar
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="{{ route('properties.forceDelete', $property->id) }}" class="flex items-center"
-                                                     onclick="event.preventDefault(); document.getElementById('force-delete-property-{{ $property->id }}').submit();">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="forceDeleteProperty({{ $property->id }})">
                                         <x-delete-icon color="text-red-500" />
                                         Excluir
                                     </x-dropdown-link>
-
-                                    <form id="restore-property-{{ $property->id }}" action="{{ route('properties.restore', $property->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-                                    <form id="force-delete-property-{{ $property->id }}" action="{{ route('properties.forceDelete', $property->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
                                 @else
                                     <!-- Ações para propriedades ativas -->
                                     <x-dropdown-link href="javascript:void(0)" class="flex items-center"
@@ -121,8 +131,7 @@ use Livewire\Volt\Component;
                                         <x-edit-icon color="text-amber-500" />
                                         Editar
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('properties.disable', $property->id) }}" class="flex items-center"
-                                                     onclick="event.preventDefault(); document.getElementById('disable-property-{{ $property->id }}').submit();">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="disableProperty({{ $property->id }})">
                                         <x-delete-icon color="text-red-500" />
                                         Desativar
                                     </x-dropdown-link>

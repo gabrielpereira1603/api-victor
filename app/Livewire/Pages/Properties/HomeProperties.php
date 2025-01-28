@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Pages\Properties;
 
-use App\Models\Company;
 use App\Models\Property;
 use Carbon\Carbon;
 use Livewire\Component;

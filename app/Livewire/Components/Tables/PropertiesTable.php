@@ -19,7 +19,41 @@ class PropertiesTable extends Component
 
     }
 
+    public function restoreProperty($propertyId)
+    {
+        $property = Property::withTrashed()->findOrFail($propertyId);
 
+        if ($property->trashed()) {
+            $property->restore();
+            session()->flash('success', 'Propriedade restaurada com sucesso.');
+        } else {
+            session()->flash('error', 'Propriedade já está ativa.');
+        }
+    }
+
+    public function forceDeleteProperty($propertyId)
+    {
+        $property = Property::withTrashed()->findOrFail($propertyId);
+
+        if ($property->trashed()) {
+            $property->forceDelete();
+            session()->flash('success', 'Propriedade excluída permanentemente.');
+        } else {
+            session()->flash('error', 'Propriedade deve ser desativada antes de ser excluída permanentemente.');
+        }
+    }
+
+    public function disableProperty($propertyId)
+    {
+        $property = Property::findOrFail($propertyId);
+
+        if (!$property->trashed()) {
+            $property->delete();
+            session()->flash('success', 'Propriedade desativada com sucesso.');
+        } else {
+            session()->flash('error', 'Propriedade já está desativada.');
+        }
+    }
 
     public function render()
     {

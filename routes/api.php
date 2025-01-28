@@ -34,3 +34,5 @@ Route::get('/cities/search', function (Request $request) {
     $cities = City::where('name', 'like', '%' . $query . '%')->get();
     return response()->json($cities);
 });
+
+require __DIR__.'/api/alerts.php';

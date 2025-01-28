@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - develop
 name: Deploy API - Homologação
 jobs:
   web-deploy:
