@@ -107,12 +107,18 @@ use Livewire\Volt\Component;
                             <x-slot name="content">
                                 @if ($property->trashed())
                                     <!-- Ações para propriedades desativadas -->
-                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="restoreProperty({{ $property->id }})">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
+                                                     wire:click="restoreProperty({{ $property->id }})"
+                                                     wire:confirm="Você deseja reativar a propiedade?"
+                                    >
                                         <x-restore-icon color="text-green-500" />
                                         Reativar
                                     </x-dropdown-link>
 
-                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="forceDeleteProperty({{ $property->id }})">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
+                                                     wire:click="forceDeleteProperty({{ $property->id }})"
+                                                     wire:confirm="Você deseja excluir permanentesmente a propiedade?"
+                                    >
                                         <x-delete-icon color="text-red-500" />
                                         Excluir
                                     </x-dropdown-link>
@@ -131,15 +137,13 @@ use Livewire\Volt\Component;
                                         <x-edit-icon color="text-amber-500" />
                                         Editar
                                     </x-dropdown-link>
-                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center" wire:click="disableProperty({{ $property->id }})">
+                                    <x-dropdown-link href="javascript:void(0)" class="flex items-center"
+                                                     wire:click="disableProperty({{ $property->id }})"
+                                                     wire:confirm="Você deseja desativar a propiedade?"
+                                    >
                                         <x-delete-icon color="text-red-500" />
                                         Desativar
                                     </x-dropdown-link>
-
-                                    <form id="disable-property-{{ $property->id }}" action="{{ route('properties.disable', $property->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
                                 @endif
                             </x-slot>
                         </x-dropdown>

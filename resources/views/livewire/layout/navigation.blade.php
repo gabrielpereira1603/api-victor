@@ -85,7 +85,7 @@
                 {{ __('Início') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('home.manage')" :active="request()->is('manage*')"
+            <x-responsive-nav-link :href="route('properties')" :active="request()->is('properties*')"
                                    class="flex items-center gap-1"
             >
                 <x-house-icon widht="18px" height="18px" color="currentColor"/>

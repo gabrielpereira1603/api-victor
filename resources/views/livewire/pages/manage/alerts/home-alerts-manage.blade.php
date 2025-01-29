@@ -9,29 +9,28 @@
 
     <div>
 
-        <div class="mt-2 mb-2">
-            @if (session()->has('success'))
-                <div x-data="{ show: true }"
-                     x-show="show"
-                     x-init="setTimeout(() => show = false, 5000)"
-                     x-transition:enter="transition-opacity ease-in duration-1000"
-                     x-transition:leave="transition-opacity ease-out duration-1000"
-                     class="bg-green-500 text-white p-2 rounded mb-4 opacity-100">
-                    {{ session('success') }}
-                </div>
-            @elseif(session()->has('error'))
-                <div x-data="{ show: true }"
-                     x-show="show"
-                     x-init="setTimeout(() => show = false, 5000)"
-                     x-transition:enter="transition-opacity ease-in duration-1000"
-                     x-transition:leave="transition-opacity ease-out duration-1000"
-                     class="bg-red-500 text-white p-2 rounded mb-4 opacity-100">
-                    {{ session('error') }}
-                </div>
-            @endif
-        </div>
-
         <div class="p-12">
+            <div class="mt-2 mb-2">
+                @if (session()->has('success'))
+                    <div x-data="{ show: true }"
+                         x-show="show"
+                         x-init="setTimeout(() => show = false, 5000)"
+                         x-transition:enter="transition-opacity ease-in duration-1000"
+                         x-transition:leave="transition-opacity ease-out duration-1000"
+                         class="bg-green-500 text-white p-2 rounded mb-4 opacity-100">
+                        {{ session('success') }}
+                    </div>
+                @elseif(session()->has('error'))
+                    <div x-data="{ show: true }"
+                         x-show="show"
+                         x-init="setTimeout(() => show = false, 5000)"
+                         x-transition:enter="transition-opacity ease-in duration-1000"
+                         x-transition:leave="transition-opacity ease-out duration-1000"
+                         class="bg-red-500 text-white p-2 rounded mb-4 opacity-100">
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </div>
             <div class="relative mb-6">
                 <h3 class="flex items-center gap-2 text-2xl font-bold text-gray-800 dark:text-gray-200">
                     <x-siren-icon width="24px" height="24px" color="#22c55e"/>
