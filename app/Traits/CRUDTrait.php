@@ -7,8 +7,7 @@ trait CRUDTrait
     public function findAll()
     {
         try {
-            $models = $this->model::withTrashed()
-                ->with(['neighborhood', 'city', 'state'])
+            $models = $this->model::with(['neighborhood', 'city', 'state'])
                 ->get();
 
             return response()->json([
@@ -23,6 +22,7 @@ trait CRUDTrait
             ], 500);
         }
     }
+
 
     public function findOne($id)
     {

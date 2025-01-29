@@ -15,18 +15,6 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::prefix('properties')->group(function () {
-        Route::post('/create', [CreatePropertyController::class, 'store'])->name('createProperties');
-        Route::put('update/{id}', [PropertyController::class, 'update'])->name('updateProperty');
-        Route::delete('delete/{id}', [PropertyController::class, 'delete'])->name('deleteProperty');
-        Route::put('/restore/{id}', [PropertyController::class, 'restore'])->name('restoreProperty');
-    });
-});
-
-Route::prefix('properties')->group(function () {
-    Route::get('/all', [PropertyController::class, 'findAll'])->name('allProperties');
-    Route::get('/{id}', [PropertyController::class, 'findOneProperties'])->name('oneProperty');
-    Route::post('/search', [PropertyController::class, 'search']);
 });
 
 Route::get('/cities/search', function (Request $request) {
@@ -36,3 +24,4 @@ Route::get('/cities/search', function (Request $request) {
 });
 
 require __DIR__.'/api/alerts.php';
+require __DIR__.'/api/properties.php';
