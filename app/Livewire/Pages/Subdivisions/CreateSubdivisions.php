@@ -31,6 +31,7 @@ class CreateSubdivisions extends Component
             $this->dispatch('validationFailed');
             throw $e;
         }
+
     }
 
     public function render()

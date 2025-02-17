@@ -28,7 +28,7 @@
                     <span class="text-lg font-semibold">{{ __("Gerenciar Loteamentos") }}</span>
 
                     <div class="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
-                        <a href="{{ route('properties.create') }}" class="w-full sm:w-auto">
+                        <a href="{{ route('subdivision.create') }}" class="w-full sm:w-auto">
                             <x-primary-button class="px-4 py-2 text-sm">
                                 <x-add-icon></x-add-icon>
                                 {{ __('Cadastrar Loteamento') }}
