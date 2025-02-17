@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Components\Tables;
 
-use App\Models\Company;
 use App\Models\Property;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -11,7 +10,6 @@ use Livewire\WithPagination;
 class PropertiesTable extends Component
 {
     use WithPagination;
-
 
     #[On('propertiesFiltered')]
     public function handleCompaniesFiltered($properties)

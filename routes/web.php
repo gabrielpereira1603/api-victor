@@ -26,4 +26,4 @@ Route::fallback(function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/web/properties.php';
 require __DIR__.'/web/manage.php';
-
+require __DIR__.'/web/subdivision.php';

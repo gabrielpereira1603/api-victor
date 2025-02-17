@@ -77,4 +77,12 @@ new class extends Component{
             </div>
         </div>
     </div>
+
+    <h1>Exibindo mapa com Leaflet</h1>
+    <div
+        id="map"
+        data-lat="-18.519336616792426"
+        data-lng="-53.16138344264474"
+        style="height: 500px; width: 100%;">
+    </div>
 </div>

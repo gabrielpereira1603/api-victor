@@ -22,6 +22,12 @@
                         {{ __('Propriedades') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('subdivision')" :active="request()->routeIs('subdivision*')">
+                        <x-area-icon widht="18px" height="18px" color="currentColor"/>
+                        {{ __('Loteamentos') }}
+                    </x-nav-link>
+
+
                     <x-nav-link :href="route('home.manage')" :active="request()->is('manage*')">
                         <x-config-icon widht="14px" height="14px" color="currentColor"/>
                         {{ __('Configurações') }}
@@ -90,6 +96,13 @@
             >
                 <x-house-icon widht="18px" height="18px" color="currentColor"/>
                 {{ __('Propiedades') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('subdivision')" :active="request()->is('subdivision*')"
+                                   class="flex items-center gap-1"
+            >
+                <x-area-icon widht="18px" height="18px" color="currentColor"/>
+                {{ __('Loteamentos') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('home.manage')" :active="request()->routeIs('manage*')"

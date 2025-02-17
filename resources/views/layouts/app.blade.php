@@ -15,6 +15,33 @@
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            .popup-content h3 {
+                font-size: 18px;
+                color: #c30c0c;
+                margin-bottom: 5px;
+            }
+
+            .popup-content p {
+                font-size: 14px;
+                color: #555;
+                margin: 2px 0;
+            }
+
+            .popup-content strong {
+                font-weight: bold;
+                color: #000;
+            }
+
+            #add-blocks{
+                background: rgba(129, 223, 151, 0.79) !important;
+            }
+
+            #add-lands{
+                background: rgba(142, 159, 213, 0.51) !important;
+            }
+        </style>
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
