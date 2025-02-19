@@ -1,4 +1,16 @@
 {
+  "node_modules/leaflet-draw/dist/images/spritesheet-2x.png": {
+    "file": "assets/spritesheet-2x-D6YjwvdA.png",
+    "src": "node_modules/leaflet-draw/dist/images/spritesheet-2x.png"
+  },
+  "node_modules/leaflet-draw/dist/images/spritesheet.png": {
+    "file": "assets/spritesheet-Bprg5DAC.png",
+    "src": "node_modules/leaflet-draw/dist/images/spritesheet.png"
+  },
+  "node_modules/leaflet-draw/dist/images/spritesheet.svg": {
+    "file": "assets/spritesheet-DpIxuf5L.svg",
+    "src": "node_modules/leaflet-draw/dist/images/spritesheet.svg"
+  },
   "node_modules/leaflet/dist/images/layers-2x.png": {
     "file": "assets/layers-2x-Bpkbi35X.png",
     "src": "node_modules/leaflet/dist/images/layers-2x.png"
@@ -17,17 +29,20 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CMNYsyn7.js",
+    "file": "assets/app-D2kH_mju.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-DsifEG5d.css"
+      "assets/app-YDfTvl3L.css"
     ],
     "assets": [
       "assets/layers-BWBAp2CZ.png",
       "assets/layers-2x-Bpkbi35X.png",
-      "assets/marker-icon-hN30_KVU.png"
+      "assets/marker-icon-hN30_KVU.png",
+      "assets/spritesheet-Bprg5DAC.png",
+      "assets/spritesheet-DpIxuf5L.svg",
+      "assets/spritesheet-2x-D6YjwvdA.png"
     ]
   }
 }

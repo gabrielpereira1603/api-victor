@@ -37,7 +37,6 @@ new class extends Component{
                     </div>
                 </div>
 
-
                 <div class="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                     <div class="p-6">
                         <h3 class="flex items-center gap-1 text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -55,7 +54,6 @@ new class extends Component{
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Exemplo de outro card (se precisar adicionar mais) -->
                 <div class="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -85,14 +83,14 @@ new class extends Component{
         <div id="map" class="w-2/3 h-screen relative z-0"
              data-coordinates-subdivision="{{ json_encode($coordinates) }}"
              data-subdivision="{{ json_encode([
-         'name' => $subdivision->name,
-         'area' => $subdivision->area,
-         'status' => $subdivision->status,
-         'city' => $subdivision->city->name,
-         'neighborhood' => $subdivision->neighborhood->name,
-         'state' => $subdivision->state->name,
-         'color' => $subdivision->color
-        ]) }}"
+                 'name' => $subdivision->name,
+                 'area' => $subdivision->area,
+                 'status' => $subdivision->status,
+                 'city' => $subdivision->city->name,
+                 'neighborhood' => $subdivision->neighborhood->name,
+                 'state' => $subdivision->state->name,
+                 'color' => $subdivision->color
+             ])}}"
              data-blocks="{{ json_encode($blocks->toArray()) }}"
              data-coordinates-blocks="{{ json_encode($blocks->pluck('coordinates')) }}"
              data-lands="{{ json_encode($lands->toArray()) }}"

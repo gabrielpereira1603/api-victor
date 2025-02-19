@@ -8,16 +8,24 @@ use Livewire\Component;
 class CreateSubdivisions extends Component
 {
     public CreateSubdivisionForm $form;
+    public $first_coordinate;
+    protected $listeners = ['updateCoordinates' => 'setCoordinates']; // 🚀 Defina o listener corretamente
 
-    public function addCoordinate()
+    public function updatedFirstCoordinate($value)
     {
-        $this->form->coordinates[] = '';
+        if (!empty($value)) {
+            $this->dispatch('firstCoordinateUpdated', $value);
+        }
     }
 
-    public function removeCoordinate($index)
+    public function setCoordinates($coordinates)
     {
-        unset($this->form->coordinates[$index]);
-        $this->form->coordinates = array_values($this->form->coordinates);
+        if (isset($coordinates['coordinates'])) {
+            $coordinates = $coordinates['coordinates'];
+        }
+
+        $this->form->coordinates = $coordinates;
+
     }
 
     public function save()

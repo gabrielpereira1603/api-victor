@@ -19,8 +19,12 @@ class ViewOneSubdivision extends Component
 
         $dataCoordinates = json_decode($this->subdivision->coordinates, true);
 
+        if (!is_array($dataCoordinates)) {
+            throw new \Exception('Erro: As coordenadas não estão em um formato válido.');
+        }
+
         $this->coordinates = array_map(function ($coord) {
-            return array_map('floatval', explode(',', $coord));
+            return array_map('floatval', $coord);
         }, $dataCoordinates);
 
         $this->blocks = $this->subdivision->blocks->map(function ($block) {
@@ -35,7 +39,6 @@ class ViewOneSubdivision extends Component
             ];
         });
 
-        // Busca os lands que pertencem aos blocks dessa subdivisão
         $blockIds = $this->subdivision->blocks->pluck('id');
         $this->lands = \App\Models\Lands::whereIn('block_id', $blockIds)->get()->map(function ($land) {
             return [
