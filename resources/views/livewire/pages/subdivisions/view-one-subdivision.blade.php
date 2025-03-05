@@ -7,17 +7,18 @@ new class extends Component{
 ?>
 <div>
     <x-slot name="header">
-        <h2 class="flex gap-1 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             <x-area-icon width="20px" height="20px" color="currentColor"/>
             Loteamento {{ $subdivision->name }}
         </h2>
     </x-slot>
 
+    <livewire:breadcrumb />
+
 
     <div class="py-6">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <!-- Card: Gerenciar Tipos de Propriedades -->
                 <div class="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                     <div class="p-6">
                         <h3 class="flex items-center gap-0.5 text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -28,10 +29,10 @@ new class extends Component{
                             Configure e gerencie o loteamento no qual voçê esta acessado no momento.
                         </p>
                         <div class="mt-4">
-                            <a href="javascript:void(0)"
+                            <a href="{{ route('subdivision.manage', $subdivision->id) }}"
                                @click="$dispatch('open-modal', 'manage-subdivisions')"
                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
-                                Gerenciar os Loteamentos
+                                Gerenciar o Loteamento
                             </a>
                         </div>
                     </div>
@@ -80,7 +81,7 @@ new class extends Component{
     <div class="p-6 flex">
 
         <!-- Mapa à esquerda -->
-        <div id="map" class="w-2/3 h-screen relative z-0"
+        <div id="view-one-subdivision-map" class="w-2/3 h-screen relative z-0"
              data-coordinates-subdivision="{{ json_encode($coordinates) }}"
              data-subdivision="{{ json_encode([
                  'name' => $subdivision->name,
@@ -117,24 +118,37 @@ new class extends Component{
                 </div>
             </div>
 
-            <div class="flex w-full gap-4 mt-4 mb-4">
-                <x-primary-button class="flex-1 justify-center" id="add-blocks"
-                                  href="javascript:void(0)"
-                                  @click="$dispatch('open-modal', 'createBlocks')"
-                >
-                    <x-add-icon width="20px" height="20px" color="currentColor"/>
-                    Cadastrar Quarteirão
-                </x-primary-button>
+            <div>
+                <a href="" class="flex w-full gap-4 mt-4 mb-4">
+                    <x-primary-button class="flex-1 justify-center" id="edit-subdivisions"
+                                      href="javascript:void(0)"
+                    >
+                        <x-edit-icon width="20px" height="20px" color="currentColor"/>
+                        Editar Marcação do Loteamento
+                    </x-primary-button>
+                </a>
             </div>
 
-            <div class="flex w-full gap-4 mt-4 mb-4">
-                <x-primary-button class="flex-1 justify-center" id="add-lands"
-                                  href="javascript:void(0)"
-                                  @click="$dispatch('open-modal', 'createLands')"
-                >
-                    <x-add-icon width="20px" height="20px" color="currentColor"/>
-                    Cadastrar Terrenos
-                </x-primary-button>
+            <div>
+                <a href="{{ route('blocks.create', $subdivision->id) }}" class="flex w-full gap-4 mt-4 mb-4">
+                    <x-primary-button class="flex-1 justify-center" id="add-blocks"
+                                      href="javascript:void(0)"
+                    >
+                        <x-add-icon width="20px" height="20px" color="currentColor"/>
+                        Cadastrar Quarteirão
+                    </x-primary-button>
+                </a>
+            </div>
+
+            <div>
+                <a href="" class="flex w-full gap-4 mt-4 mb-4">
+                    <x-primary-button class="flex-1 justify-center" id="add-lands"
+                                      href="javascript:void(0)"
+                    >
+                        <x-add-icon width="20px" height="20px" color="currentColor"/>
+                        Cadastrar Terrenos
+                    </x-primary-button>
+                </a>
             </div>
 
             <p class="flex items-center gap-1 text-p mb-2 text-gray-600">
@@ -155,7 +169,7 @@ new class extends Component{
             <div class="grid grid-cols-2 gap-4">
                 @foreach($blocks as $block)
                     <div class="flex items-center gap-2">
-                        <label for="block-{{ $block['id'] }}" class="block text-sm font-medium text-gray-700">{{ $block['name'] }}</label>
+                        <label for="block-{{ $block['id'] }}" class="block text-sm font-medium text-gray-700">Quarteirão {{ $block['code'] }}</label>
                         <input type="checkbox" id="block-{{ $block['id'] }}" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-200 ease-in-out rounded focus:ring-indigo-500" checked>
                     </div>
                 @endforeach
@@ -175,9 +189,6 @@ new class extends Component{
             </div>
 
         </div>
-
-        <livewire:components.modals.lands.create-lands-modal :subdivision="$subdivision" />
-        <livewire:components.modals.blocks.create-blocks-modal :subdivision="$subdivision" />
     </div>
 
 </div>

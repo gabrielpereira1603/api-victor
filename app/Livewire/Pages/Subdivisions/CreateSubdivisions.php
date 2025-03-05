@@ -3,13 +3,14 @@
 namespace App\Livewire\Pages\Subdivisions;
 
 use App\Livewire\Forms\Subdivisions\CreateSubdivisionForm;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class CreateSubdivisions extends Component
 {
     public CreateSubdivisionForm $form;
     public $first_coordinate;
-    protected $listeners = ['updateCoordinates' => 'setCoordinates']; // 🚀 Defina o listener corretamente
+    protected $listeners = ['updateCoordinates' => 'setCoordinates'];
 
     public function updatedFirstCoordinate($value)
     {
@@ -31,7 +32,7 @@ class CreateSubdivisions extends Component
     public function save()
     {
         try {
-            $this->form->store();
+            $this->form->store($this->first_coordinate);
             session()->flash('success', 'Loteamento salva com sucesso!');
             $this->dispatch('subdivisionCreated');
             return $this->redirect('/subdivision');

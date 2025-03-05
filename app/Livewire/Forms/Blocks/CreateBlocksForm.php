@@ -36,7 +36,7 @@ class CreateBlocksForm extends Form
 
     public $blocks;
 
-    public function store()
+    public function store($first_cordinate)
     {
 
         $this->validate();
@@ -49,6 +49,7 @@ class CreateBlocksForm extends Form
                 'subdivision_id' => $this->subdivision->id,
                 'name' => $this->name,
                 'code' => $this->code,
+                'first_cordinate' => $first_cordinate,
                 'coordinates' => $this->coordinates ? json_encode($this->coordinates) : null,
                 'status' => $this->status,
                 'area' => $this->area,

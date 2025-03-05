@@ -15,6 +15,7 @@ class Blocks extends Model
         'code',
         'subdivision_id',
         'coordinates',
+        'first_coordinate',
         'status',
         'area',
         'color',

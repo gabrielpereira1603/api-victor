@@ -16,6 +16,7 @@ class Subdivision extends Model
         'state_id',
         'name',
         'coordinates',
+        'first_coordinate',
         'status',
         'area',
         'color',

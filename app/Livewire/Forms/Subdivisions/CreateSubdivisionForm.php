@@ -37,8 +37,9 @@ class CreateSubdivisionForm extends Form
     #[Validate('nullable|string|max:255')]
     public $color = '#000000';
 
-    public function store()
+    public function store($first_coordinate)
     {
+
         $this->validate();
 
         DB::beginTransaction();
@@ -67,6 +68,7 @@ class CreateSubdivisionForm extends Form
             $subdivision = Subdivision::create([
                 'city_id' => $this->city->id,
                 'neighborhood_id' => $this->neighborhood->id,
+                'first_coordinate' => $first_coordinate,
                 'state_id' => $this->state->id,
                 'name' => $this->name,
                 'coordinates' => $this->coordinates ? json_encode($this->coordinates) : null,

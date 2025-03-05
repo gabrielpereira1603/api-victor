@@ -40,6 +40,10 @@
             #add-lands{
                 background: rgba(142, 159, 213, 0.51) !important;
             }
+
+            #edit-subdivisions{
+                background: rgba(244, 211, 58, 0.51) !important;
+            }
         </style>
 
     </head>

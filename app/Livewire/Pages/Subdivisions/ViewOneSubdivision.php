@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Subdivisions;
 
+use App\Models\Lands;
 use App\Models\Subdivision;
 use Livewire\Component;
 
@@ -40,7 +41,7 @@ class ViewOneSubdivision extends Component
         });
 
         $blockIds = $this->subdivision->blocks->pluck('id');
-        $this->lands = \App\Models\Lands::whereIn('block_id', $blockIds)->get()->map(function ($land) {
+        $this->lands = Lands::whereIn('block_id', $blockIds)->get()->map(function ($land) {
             return [
                 'id' => $land->id,
                 'name' => $land->name,

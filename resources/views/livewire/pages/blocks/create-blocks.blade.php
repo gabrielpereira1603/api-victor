@@ -1,10 +1,13 @@
 <div>
     <x-slot name="header">
-        <h2 class="flex gap-1 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-add-icon width="20px" height="20px" color="currentColor"/>
-            {{ __('Cadastrar Loteamento') }}
-        </h2>
+        <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+            <x-add-icon width="24px" height="24px" color="currentColor" />
+            <h2 class="text-xl font-semibold">
+                Cadastrar Quarteirão
+            </h2>
+        </div>
     </x-slot>
+
     <livewire:breadcrumb />
 
     <div class="py-12">
@@ -41,14 +44,23 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div>
                                 <x-input-label for="first_coordinate" value="Cordenada Inicial*" />
-                                <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full" />
+                                <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full" disabled/>
                             </div>
 
-                            <input type="" id="coordinates" wire:model="form.coordinates" name="coordinates">
                             <div>
-                                <x-input-label for="name" value="Nome do Loteamento*" />
+                                <x-input-label for="coordinates" value="Cordenadas do Loteamento*" />
+                                <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full" disabled/>
+                            </div>
+
+                            <div>
+                                <x-input-label for="name" value="Nome do Quarteirão*" />
                                 @error('form.name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="name" wire:model="form.name" placeholder="Ex: Loteamento Exemple II" id="name" class="w-full" />
+                                <x-text-input type="text" name="name" wire:model="form.name" placeholder="Ex: Quarteirão A" id="name" class="w-full" />
+                            </div>
+                            <div>
+                                <x-input-label for="code" value="Código do Quarteirão*" />
+                                @error('form.code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <x-text-input type="text" name="code" wire:model="form.code" placeholder="Ex: A" id="code" class="w-full" />
                             </div>
                             <div>
                                 <x-input-label for="status" value="Status*" />
@@ -74,22 +86,6 @@
                                     <x-text-input type="text" wire:model="form.color" id="color_code" class="w-full" placeholder="#000000" />
                                 </div>
                             </div>
-
-                            <div>
-                                <x-input-label for="neighborhood" value="Bairro*" />
-                                @error('form.neighborhood') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="neighborhood" wire:model="form.neighborhood" id="neighborhood" class="w-full" />
-                            </div>
-                            <div>
-                                <x-input-label for="city" value="Cidade*" />
-                                @error('form.city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="city" wire:model="form.city" id="city" class="w-full" />
-                            </div>
-                            <div>
-                                <x-input-label for="state" value="Estado*" />
-                                @error('form.state') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="state" wire:model="form.state" id="state" class="w-full" />
-                            </div>
                         </div>
                     </div>
 
@@ -101,22 +97,22 @@
 
                         <x-primary-button type="submit" wire:target="save" class="flex gap-2 items-center">
                             <x-save-icon width="20px" height="20px" color="currentColor" />
-                            {{ __('Salvar Loteamento') }}
+                            {{ __('Salvar Quarteirão') }}
                         </x-primary-button>
                     </div>
                 </form>
-
-                <div class="container-map-create-subdivisions" style="display: none">
+                <div class="container-map-create-blocks" >
                     <h2 class="flex gap-1 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         <x-area-icon width="20px" height="20px" color="currentColor"/>
-                        {{ __('Cadastrar Loteamento') }}
+                        {{ __('Cadastrar Quarteirão') }}
                     </h2>
-
-                    <div id="map-create-subdivisions"
+                    <div id="map-create-blocks"
                          class="w-full mt-5 h-screen relative z-0"
                          data-first_coordinates="{{ $first_coordinate }}"
+                         data-subdivision_coordinates="{{ $form->subdivision->coordinates }}"
+                         data-blocks_coordinates="{{ $blocks }}"
                          wire:ignore
-                         style="display: none;">
+                         >
                     </div>
                 </div>
 
@@ -125,3 +121,4 @@
     </div>
 
 </div>
+

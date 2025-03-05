@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const mapElement = document.getElementById('map-create-subdivisions');
-    console.log('Elemento do mapa encontrado:', mapElement);
 
     if (!mapElement) {
         console.error('Elemento do mapa não encontrado.');

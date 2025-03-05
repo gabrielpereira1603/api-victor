@@ -15,6 +15,7 @@ class Lands extends Model
         'code',
         'block_id',
         'coordinates',
+        'first_coordinate',
         'status',
         'area',
         'color',
