@@ -1,6 +1,7 @@
 import L from "leaflet";
 
 document.addEventListener('DOMContentLoaded', () => {
+
     const mapElement = document.getElementById('view-one-subdivision-map');
     if (!mapElement) {
         //console.error('Elemento do mapa não encontrado.');

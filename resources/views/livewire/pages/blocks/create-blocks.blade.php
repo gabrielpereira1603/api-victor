@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="flex justify-end gap-4">
-                        <x-cancel-button onclick="window.location.href='{{ route('properties') }}'" class="flex gap-2 items-center">
+                        <x-cancel-button onclick="window.location.href='{{ route('subdivision.view_one', $subdivision_id) }}'" class="flex gap-2 items-center">
                             <x-cancel-icon width="20px" height="20px" color="currentColor" />
                             {{ __('Voltar') }}
                         </x-cancel-button>
@@ -101,6 +101,7 @@
                         </x-primary-button>
                     </div>
                 </form>
+
                 <div class="container-map-create-blocks" >
                     <h2 class="flex gap-1 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         <x-area-icon width="20px" height="20px" color="currentColor"/>
@@ -110,7 +111,7 @@
                          class="w-full mt-5 h-screen relative z-0"
                          data-first_coordinates="{{ $first_coordinate }}"
                          data-subdivision_coordinates="{{ $form->subdivision->coordinates }}"
-                         data-blocks_coordinates="{{ $blocks }}"
+                         data-blocks_coordinates="{{ $blocks_coordinate }}"
                          wire:ignore
                          >
                     </div>

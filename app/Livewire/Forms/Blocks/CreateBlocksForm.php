@@ -38,34 +38,30 @@ class CreateBlocksForm extends Form
 
     public function store($first_cordinate)
     {
-
         $this->validate();
 
         DB::beginTransaction();
 
         try {
-
-            $blocks = Blocks::create([
+            Blocks::create([
                 'subdivision_id' => $this->subdivision->id,
                 'name' => $this->name,
                 'code' => $this->code,
-                'first_cordinate' => $first_cordinate,
+                'first_coordinate' => $first_cordinate,
                 'coordinates' => $this->coordinates ? json_encode($this->coordinates) : null,
                 'status' => $this->status,
                 'area' => $this->area,
                 'color' => $this->color,
             ]);
+
             DB::commit();
-
-            session()->flash('success', 'Quarteirão cadastrado com sucesso!');
-            return redirect()->to('/view_one/' . $this->subdivision->id);
-
+            return true;
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Erro ao cadastrar Quarteirão. Tente novamente.');
-            throw $e;
+            return false;
         }
-
     }
+
 
 }

@@ -141,7 +141,7 @@ new class extends Component{
             </div>
 
             <div>
-                <a href="" class="flex w-full gap-4 mt-4 mb-4">
+                <a href="{{ route('lands.create', $subdivision->id) }}" class="flex w-full gap-4 mt-4 mb-4">
                     <x-primary-button class="flex-1 justify-center" id="add-lands"
                                       href="javascript:void(0)"
                     >

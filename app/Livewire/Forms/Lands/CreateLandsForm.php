@@ -4,6 +4,7 @@ namespace App\Livewire\Forms\Lands;
 
 use App\Models\Blocks;
 use App\Models\Lands;
+use App\Models\Subdivision;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -16,7 +17,7 @@ class CreateLandsForm extends Form
     #[Validate('required|string|max:255')]
     public $code;
 
-    #[Validate('nullable|array')]
+    #[Validate('required|nullable|array')]
     public $coordinates = [];
 
     #[Validate('required|in:active,inactive')]
@@ -25,30 +26,29 @@ class CreateLandsForm extends Form
     #[Validate('nullable|numeric|min:0')]
     public $area;
 
-    #[Validate('nullable|string|max:255')]
-    public $color = '#000000';
+    public $color = '';
 
     public $lands;
 
+    #[Validate('required')]
     public $blocks;
 
-    public $subdivision;
+    public Subdivision $subdivision;
 
     public $block_id;
 
-    public function store()
+    public function store($first_coordinate)
     {
-
         $this->validate();
+
         DB::beginTransaction();
-
         try {
-
             $lands = Lands::create([
-                'block_id' => $this->block_id,
+                'block_id' => $this->blocks,
                 'name' => $this->name,
                 'code' => $this->code,
-                'coordinates' => $this->coordinates ? json_encode($this->coordinates) : null,
+                'coordinates' => json_encode($this->coordinates),
+                'first_coordinate' => $first_coordinate,
                 'status' => $this->status,
                 'area' => $this->area,
                 'color' => $this->color,
@@ -57,14 +57,13 @@ class CreateLandsForm extends Form
             DB::commit();
 
             session()->flash('success', 'Terreno cadastrado com sucesso!');
-            return redirect()->to('/view_one/' . $this->subdivision->id);
-
+            return redirect()->route('subdivision.view_one', ['subdivision_id' => $this->subdivision->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Erro ao cadastrar Terreno. Tente novamente.');
             throw $e;
         }
-
     }
+
 
 }

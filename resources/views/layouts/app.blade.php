@@ -11,6 +11,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        @livewireStyles
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -34,15 +35,30 @@
             }
 
             #add-blocks{
-                background: rgba(129, 223, 151, 0.79) !important;
+                background: rgba(8, 131, 38, 0.95) !important;
+            }
+
+            #add-blocks:hover{
+                border: green solid 1px;
+                background: rgba(8, 131, 38, 0.85) !important;
             }
 
             #add-lands{
-                background: rgba(142, 159, 213, 0.51) !important;
+                background: rgba(88, 116, 202, 0.93) !important;
+            }
+
+            #add-lands:hover{
+                border: blue solid 1px;
+                background: rgba(88, 116, 202, 0.85) !important;
             }
 
             #edit-subdivisions{
-                background: rgba(244, 211, 58, 0.51) !important;
+                background: rgb(216, 187, 48) !important;
+            }
+
+            #edit-subdivisions:hover{
+                border: yellow solid 1px;
+                background: rgba(216, 187, 48, 0.94) !important;
             }
         </style>
 
@@ -65,5 +81,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @livewireScripts
     </body>
 </html>
