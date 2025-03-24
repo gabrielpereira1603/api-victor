@@ -1,6 +1,6 @@
 import './bootstrap';
 import flatpickr from "flatpickr";
-import Alpine from 'alpinejs';
+import A from 'alpinejs';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './Calendar/Alert.js';
@@ -12,10 +12,11 @@ import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
 // Adiciona Alpine ao escopo global
-window.Alpine = Alpine;
-Alpine.start();
+window.A = A;
+A.start();
 
 // Adiciona Flatpickr ao escopo global
 window.flatpickr = flatpickr;
 window.L = L;
+
 

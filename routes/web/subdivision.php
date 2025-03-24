@@ -3,6 +3,7 @@
 use App\Livewire\Pages\Properties\CreateProperties;
 use App\Livewire\Pages\Subdivisions\CreateSubdivisions;
 use App\Livewire\Pages\Subdivisions\HomeSubdivisions;
+use App\Livewire\Pages\Subdivisions\Manage\ManageBloks;
 use App\Livewire\Pages\Subdivisions\Manage\ManageSubdivisions;
 use App\Livewire\Pages\Subdivisions\ViewOneSubdivision;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,7 @@ Route::prefix('subdivision')->middleware('auth')->group(function () {
 
     Route::prefix('manage')->group(function () {
         Route::get('/{subdivision_id}', ManageSubdivisions::class)->name('subdivision.manage');
-
+        Route::get('/blocks/{subdivision_id}', ManageBloks::class)->name('subdivision.blocks.manage');
     });
 });
 

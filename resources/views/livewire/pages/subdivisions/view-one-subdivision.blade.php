@@ -48,7 +48,7 @@ new class extends Component{
                             Configure os quarteirões cadastrados vinculados ao Loteamento acessado no momento.
                         </p>
                         <div class="mt-4">
-                            <a href="{{ route('home.alerts') }}"
+                            <a href="{{ route('subdivision.blocks.manage', $subdivision->id) }}"
                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
                                 Gerenciar Quarteirões
                             </a>
@@ -92,9 +92,9 @@ new class extends Component{
                  'state' => $subdivision->state->name,
                  'color' => $subdivision->color
              ])}}"
-             data-blocks="{{ json_encode($blocks->toArray()) }}"
+             data-blocks="{{ json_encode($blocks) }}"
              data-coordinates-blocks="{{ json_encode($blocks->pluck('coordinates')) }}"
-             data-lands="{{ json_encode($lands->toArray()) }}"
+             data-lands="{{ json_encode($lands) }}"
              data-coordinates-lands="{{ json_encode($lands->pluck('coordinates')) }}">
         </div>
 

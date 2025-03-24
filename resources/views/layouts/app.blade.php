@@ -11,7 +11,6 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        @livewireStyles
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -32,6 +31,10 @@
             .popup-content strong {
                 font-weight: bold;
                 color: #000;
+            }
+
+            .map-card-manage-block{
+                z-index: 0 !important;
             }
 
             #add-blocks{
@@ -81,6 +84,5 @@
                 {{ $slot }}
             </main>
         </div>
-        @livewireScripts
     </body>
 </html>

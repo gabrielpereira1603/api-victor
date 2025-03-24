@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const toggleVisibility = (id, isChecked, polygons) => {
-        const item = polygons.find(p => p.blockId === parseInt(id) || p.landId === parseInt(id));
+        const item = polygons.find(p => p.landId === parseInt(id)); // Corrigido para filtrar pelas terras
         if (item) {
             isChecked ? item.polygon.addTo(map) : map.removeLayer(item.polygon);
         }
