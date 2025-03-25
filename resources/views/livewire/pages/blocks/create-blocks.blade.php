@@ -1,15 +1,31 @@
 <div>
     <x-slot name="header">
-        <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <x-add-icon width="24px" height="24px" color="currentColor" />
-            <h2 class="text-xl font-semibold">
-                Cadastrar Quarteirão
-            </h2>
+        <div class="flex justify-between items-center text-gray-900 dark:text-gray-100">
+            <div class="flex items-center gap-2">
+                <x-add-icon width="24px" height="24px" color="currentColor" />
+                <h2 class="text-xl font-semibold">
+                    Cadastrar Quarteirão
+                </h2>
+            </div>
+            <a href="{{ route('subdivision.view_one', $subdivision_id) }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                Voltar
+            </a>
         </div>
     </x-slot>
-
-    <livewire:breadcrumb />
-
+    <div>
+        @if(session('success') || session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        title: "{{ session('success') ? 'Sucesso!' : 'Erro!' }}",
+                        text: "{{ session('success') ?? session('error') }}",
+                        icon: "{{ session('success') ? 'success' : 'error' }}",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        @endif
+    </div>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
@@ -42,15 +58,8 @@
                     </div>
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div>
-                                <x-input-label for="first_coordinate" value="Cordenada Inicial*" />
-                                <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full" disabled/>
-                            </div>
-
-                            <div>
-                                <x-input-label for="coordinates" value="Cordenadas do Loteamento*" />
-                                <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full" disabled/>
-                            </div>
+                            <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full hidden" disabled/>
+                            <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
 
                             <div>
                                 <x-input-label for="name" value="Nome do Quarteirão*" />
@@ -65,12 +74,12 @@
                             <div>
                                 <x-input-label for="status" value="Status*" />
                                 @error('form.status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <select name="status" id="status" wire:model="form.status" class="w-full border-gray-300 rounded-md shadow-sm">
-                                    <option value="active">Ativo</option>
-                                    <option value="inactive">Inativo</option>
+                                <select name="status" id="status" wire:model="form.status" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                                    <option value="Disponível">Disponível</option>
+                                    <option value="Reservada">Reservada</option>
+                                    <option value="Indisponível">Indisponível</option>
                                 </select>
                             </div>
-
                             <div>
                                 <x-input-label for="area" value="Área (m²)*" />
                                 @error('form.area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror

@@ -1,10 +1,3 @@
-<?php
-use Livewire\Volt\Component;
-
-new class extends Component{
-    public $modal = false;
-};
-?>
 <div>
     <x-slot name="header">
         <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -12,10 +5,20 @@ new class extends Component{
             Loteamento {{ $subdivision->name }}
         </h2>
     </x-slot>
-
-    <livewire:breadcrumb />
-
-
+    <div>
+        @if(session('success') || session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        title: "{{ session('success') ? 'Sucesso!' : 'Erro!' }}",
+                        text: "{{ session('success') ?? session('error') }}",
+                        icon: "{{ session('success') ? 'success' : 'error' }}",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        @endif
+    </div>
     <div class="py-6">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -165,7 +168,6 @@ new class extends Component{
                 <x-info-icon width="14px" height="14px" color="currentColor"/>
                 Gerenciar visualização de Quarteirões
             </p>
-
             <div class="grid grid-cols-2 gap-4">
                 @foreach($blocks as $block)
                     <div class="flex items-center gap-2">
@@ -180,15 +182,22 @@ new class extends Component{
                 Gerenciar visualização de Terrenos
             </p>
             <div class="grid grid-cols-2 gap-4">
-                @foreach($lands as $land)
-                    <div class="flex items-center gap-2">
-                        <label for="land-{{ $land['id'] }}" class="block text-sm font-medium text-gray-700">{{ $land['name'] }}</label>
-                        <input type="checkbox" id="land-{{ $land['id'] }}" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-200 ease-in-out rounded focus:ring-indigo-500" checked>
+                @foreach($blocks as $block)
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-800">Quarteirão {{ $block['code'] }}</h3>
+                        @if(isset($landsByBlock[$block['id']]))
+                            @foreach($landsByBlock[$block['id']] as $land)
+                                <div class="flex items-center gap-2">
+                                    <label for="land-{{ $land['id'] }}" class="block text-sm font-medium text-gray-700">{{ $land['name'] }}</label>
+                                    <input type="checkbox" id="land-{{ $land['id'] }}" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-200 ease-in-out rounded focus:ring-indigo-500" checked>
+                                </div>
+                            @endforeach
+                        @else
+                            <p class="text-xs text-gray-500">Nenhum terreno disponível.</p>
+                        @endif
                     </div>
                 @endforeach
             </div>
-
-        </div>
     </div>
 
 </div>

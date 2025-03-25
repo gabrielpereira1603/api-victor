@@ -18,6 +18,8 @@ class Lands extends Model
         'first_coordinate',
         'status',
         'area',
+        'front_size',
+        'background_size',
         'color',
     ];
 

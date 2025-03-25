@@ -86,12 +86,10 @@ class EditLandByBlock extends Component
 
     public function startForm(Lands $land)
     {
-        // Inicializa as propriedades do formulário
         $this->form->name = $land->name;
         $this->form->code = $land->code;
 
 
-        // Atribui valores de status, área e cor
         $this->form->status = $land->status;
         $this->form->area = $land->area;
         $this->form->color = $land->color;

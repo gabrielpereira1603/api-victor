@@ -12,6 +12,7 @@ class ViewOneSubdivision extends Component
     public $coordinates;
     public $blocks;
     public $lands;
+    public $landsByBlock;
 
 
     public function mount($subdivision_id)
@@ -41,6 +42,7 @@ class ViewOneSubdivision extends Component
         });
 
         $blockIds = $this->subdivision->blocks->pluck('id');
+
         $this->lands = Lands::whereIn('block_id', $blockIds)->get()->map(function ($land) {
             return [
                 'id' => $land->id,
@@ -51,6 +53,20 @@ class ViewOneSubdivision extends Component
                 'area' => $land->area,
                 'code' => $land->code,
             ];
+        });
+
+        $this->landsByBlock  = Lands::whereIn('block_id', $blockIds)->get()->groupBy('block_id')->map(function ($lands) {
+            return $lands->map(function ($land) {
+                return [
+                    'id' => $land->id,
+                    'name' => $land->name,
+                    'coordinates' => $land->coordinates ? json_decode($land->coordinates, true) : [],
+                    'status' => $land->status,
+                    'color' => $land->color,
+                    'area' => $land->area,
+                    'code' => $land->code,
+                ];
+            });
         });
     }
 

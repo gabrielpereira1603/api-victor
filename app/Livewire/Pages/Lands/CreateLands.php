@@ -74,6 +74,7 @@ class CreateLands extends Component
                 'status' => $land->status,
                 'area' => $land->area,
                 'coordinates' => $land->coordinates,
+                'color' => $land->color
             ];
         })->toJson();
 

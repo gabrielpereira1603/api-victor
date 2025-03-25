@@ -1,10 +1,8 @@
 import L from "leaflet";
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const mapElement = document.getElementById('view-one-subdivision-map');
     if (!mapElement) {
-        //console.error('Elemento do mapa não encontrado.');
         return;
     }
 
@@ -12,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const subdivisionData = JSON.parse(mapElement.dataset.subdivision);
     const blocksData = JSON.parse(mapElement.dataset.blocks);
     const landsData = JSON.parse(mapElement.dataset.lands);
+
 
     if (Array.isArray(coordinates) && coordinates.length > 0) {
         coordinates = coordinates.map(coord => coord.map(Number));
@@ -23,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const map = L.map(mapElement, {
         center: [coordinates[0][0], coordinates[0][1]],
         zoom: 18,
-        minZoom: 15, // Permite um zoom mais amplo
-        maxZoom: 22, // Permite um zoom mais detalhado
-        zoomControl: true, // Ativa os controles de zoom
+        minZoom: 15,
+        maxZoom: 22,
+        zoomControl: true,
         scrollWheelZoom: true,
         dragging: true
     });
@@ -34,66 +33,58 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: '© OpenStreetMap Contributors'
     }).addTo(map);
 
-    const polygon = L.polygon(coordinates, {
-        color: subdivisionData.color || 'green',
-        fillColor: subdivisionData.color || '#3f3',
+    const subdivisionPolygon = L.polygon(coordinates, {
+        color: 'yellow',
+        fillColor: 'yellow',
         fillOpacity: 0.2
     }).addTo(map);
 
-    polygon.bindPopup(`<h3>${subdivisionData.name}</h3><p><strong>Área:</strong> ${subdivisionData.area} m²</p>`);
-
-    // Adicionando controles de desenho
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems,
-            remove: true
-        },
-        draw: {
-            polygon: true,
-            rectangle: true,
-            circle: false,
-            marker: false,
-            polyline: false
-        }
-    });
+    subdivisionPolygon.bindPopup(`<h3>${subdivisionData.name}</h3>
+        <p><strong>Área:</strong> ${subdivisionData.area} m²</p>
+        <p><strong>Localização:</strong> ${subdivisionData.city}, ${subdivisionData.state}</p>
+    `);
 
     const blockPolygons = blocksData.map(block => {
-        const blockCoordinates = block.coordinates.map(coord =>
-            Array.isArray(coord) ? coord.map(Number) : coord.split(',').map(Number)
-        );
-
+        const blockCoordinates = block.coordinates.map(coord => coord.map(Number));
         const blockPolygon = L.polygon(blockCoordinates, {
-            color: block.color || 'blue',
-            fillColor: block.color || '#3f3',
+            color: 'green',
+            fillColor: 'green',
             fillOpacity: 0.2
         }).addTo(map);
 
-        blockPolygon.bindPopup(`<h3>${block.name}</h3><p><strong>Área:</strong> ${block.area} m²</p>`);
-        return { blockId: block.id, polygon: blockPolygon };
+        blockPolygon.bindPopup(`<h3>${block.name}</h3>
+            <p><strong>Área:</strong> ${block.area ? block.area + ' m²' : 'N/A'}</p>
+            <p><strong>Status:</strong> ${block.status}</p>
+        `);
+
+        return { id: block.id, polygon: blockPolygon };
     });
 
     const landPolygons = landsData.map(land => {
-        const landCoordinates = land.coordinates.map(coord => coord.split(',').map(Number));
+        const landCoordinates = land.coordinates.map(coord => coord.map(Number)); // Corrigido
         const landPolygon = L.polygon(landCoordinates, {
-            color: land.color || 'purple',
-            fillColor: land.color || '#f0f',
-            fillOpacity: 0.2
+            color: land.color || 'blue',
+            fillColor:  land.color || 'blue',
+            fillOpacity: 0.4
         }).addTo(map);
 
-        landPolygon.bindPopup(`<h3>${land.name}</h3><p><strong>Área:</strong> ${land.area} m²</p>`);
-        return { landId: land.id, polygon: landPolygon };
+        landPolygon.bindPopup(`<h3>${land.name}</h3>
+            <p><strong>Código:</strong> ${land.code}</p>
+            <p><strong>Status:</strong> ${land.status}</p>
+        `);
+
+        return { id: land.id, polygon: landPolygon };
     });
 
-    const toggleVisibility = (id, isChecked, polygons) => {
-        const item = polygons.find(p => p.landId === parseInt(id)); // Corrigido para filtrar pelas terras
+    // Função para alternar visibilidade
+    const toggleVisibility = (id, isChecked, polygons, key = "id") => {
+        const item = polygons.find(p => p[key] === parseInt(id));
         if (item) {
             isChecked ? item.polygon.addTo(map) : map.removeLayer(item.polygon);
         }
     };
 
+    // Controles de visibilidade
     document.querySelectorAll('input[id^="block-"]').forEach(checkbox => {
         checkbox.addEventListener('change', event => {
             toggleVisibility(event.target.id.replace('block-', ''), event.target.checked, blockPolygons);
@@ -107,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('subdivision-toggle')?.addEventListener('change', event => {
-        event.target.checked ? map.addLayer(polygon) : map.removeLayer(polygon);
+        event.target.checked ? map.addLayer(subdivisionPolygon) : map.removeLayer(subdivisionPolygon);
     });
 });

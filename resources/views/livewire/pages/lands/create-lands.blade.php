@@ -34,20 +34,13 @@
                             {{ __('Os campos sem "*" são opcionais.') }}
 
                         </h2>
-                        <small class="flex gap-1 items-start sm:items-center font-semibold text-p text-gray-800 dark:text-gray-200">
-                            {{ __('Pegue a coordenada inicial do loteamento para inicilizar o mapa para marcação.') }}
-                            <a class="underline" href="#">Não sabe como pegar a coordenada ? Clique aqui!</a>
-                        </small>
+
                     </div>
 
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div>
-                                <x-input-label for="first_coordinate" value="Cordenada Inicial*" />
-                                <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full" disabled/>
-                                <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
-                            </div>
-
+                            <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" class="w-full hidden" disabled/>
+                            <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
                             <div>
                                 <x-input-label for="name" value="Nome do Terreno*" />
                                 @error('form.name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -62,8 +55,9 @@
                                 <x-input-label for="status" value="Status*" />
                                 @error('form.status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 <select name="status" id="status" wire:model="form.status" class="w-full border-gray-300 rounded-md shadow-sm" required>
-                                    <option value="active">Ativo</option>
-                                    <option value="inactive">Inativo</option>
+                                    <option value="Disponível">Disponível</option>
+                                    <option value="Reservado">Reservado</option>
+                                    <option value="Indisponível">Indisponível</option>
                                 </select>
                             </div>
 
@@ -85,16 +79,17 @@
                                 @error('form.area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 <x-text-input type="number" step="0.01" name="area" wire:model="form.area" placeholder="Ex: 100,00 m²" id="area" class="w-full" />
                             </div>
-
                             <div>
-                                <x-input-label for="color" value="Cor*" />
-                                @error('form.color') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <div class="flex items-center gap-2">
-                                    <input type="color" wire:model="form.color" id="color" class="w-10 h-10 p-0 border rounded-md" />
-
-                                    <x-text-input type="text" wire:model="form.color" id="color_code" class="w-full" placeholder="#000000" />
-                                </div>
+                                <x-input-label for="background_size" value="Tamanho de fundo (m)*" />
+                                @error('form.background_size') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <x-text-input type="number" step="0.01" name="background_size" wire:model="form.background_size" placeholder="Ex: 100,00 m" id="background_size" class="w-full" />
                             </div>
+                            <div>
+                                <x-input-label for="front_size" value="Tamanho de frente (m)*" />
+                                @error('form.front_size') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <x-text-input type="number" step="0.01" name="front_size" wire:model="form.front_size" placeholder="Ex: 100,00 m" id="front_size" class="w-full" />
+                            </div>
+
                         </div>
                     </div>
 

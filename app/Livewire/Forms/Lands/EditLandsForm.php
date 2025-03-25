@@ -19,11 +19,17 @@ class EditLandsForm extends Form
     #[Validate('required|nullable|array')]
     public $coordinates = [];
 
-    #[Validate('required|in:active,inactive')]
-    public $status = 'active';
+    #[Validate('required|in:Disponível,Reservado,Indisponível')]
+    public $status = 'Disponível';
 
     #[Validate('nullable|numeric|min:0')]
     public $area;
+
+    #[Validate('required|numeric|min:0')]
+    public $front_size;
+
+    #[Validate('required|numeric|min:0')]
+    public $background_size;
 
     public $color = '';
 
@@ -38,6 +44,14 @@ class EditLandsForm extends Form
 
     public function store($first_coordinate, $land_id)
     {
+        if ($this->status == 'Disponível') {
+            $this->color = 'green';
+        } elseif ($this->status == 'Reservado') {
+            $this->color = 'yellow';
+        } elseif ($this->status == 'Indisponível') {
+            $this->color = 'red';
+        }
+
         $this->validate();
 
         DB::beginTransaction();

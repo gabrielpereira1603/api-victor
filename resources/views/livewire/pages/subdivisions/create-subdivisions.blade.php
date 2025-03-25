@@ -53,9 +53,10 @@
                             <div>
                                 <x-input-label for="status" value="Status*" />
                                 @error('form.status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <select name="status" id="status" wire:model="form.status" class="w-full border-gray-300 rounded-md shadow-sm">
-                                    <option value="active">Ativo</option>
-                                    <option value="inactive">Inativo</option>
+                                <select name="status" id="status" wire:model="form.status" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                                    <option value="Disponível">Disponível</option>
+                                    <option value="Reservado">Reservado</option>
+                                    <option value="Indisponível">Indisponível</option>
                                 </select>
                             </div>
 

@@ -40,7 +40,7 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         draw: {
             polygon: {
                 shapeOptions: {
-                    color: 'green',
+                    color: 'black',
                     weight: 5
                 }
             },
@@ -64,24 +64,20 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
 
         Livewire.dispatch('updateCoordinates', { coordinates: newCoordinates });
 
-        // Atualizar o valor do input hidden
         const coordinatesInput = document.getElementById('coordinates');
         if (coordinatesInput) {
             coordinatesInput.value = JSON.stringify(newCoordinates);
         }
     });
 
-    // Escutar o evento de edição para atualizar as coordenadas
     map.on(L.Draw.Event.EDITED, function (event) {
         const layers = event.layers;
 
         layers.eachLayer(function (layer) {
-            // Corrigir a estrutura das coordenadas depois da edição
             const updatedCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
 
             console.log('Coordenadas atualizadas para Livewire:', updatedCoordinates);
 
-            // Atualizar o valor do input hidden
             const coordinatesInput = document.getElementById('coordinates');
             if (coordinatesInput) {
                 coordinatesInput.value = JSON.stringify(updatedCoordinates);
@@ -134,12 +130,13 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
 
     // Exibir Lands (Terrenos)
     if (landsCoordinates) {
+        conso
         const parsedLands = JSON.parse(landsCoordinates);
         parsedLands.forEach(land => {
             const polygon = L.polygon(JSON.parse(land.coordinates), {
-                color: 'blue',
+                color: landsCoordinates.color || 'red',
                 weight: 2,
-                fillColor: '#ADD8E6',
+                fillColor: landsCoordinates.color || 'red',
                 fillOpacity: 0.6
             }).addTo(map);
 
