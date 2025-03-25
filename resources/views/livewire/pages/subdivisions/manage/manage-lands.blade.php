@@ -2,7 +2,10 @@
     <x-slot name="header">
         <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             <x-area-icon width="20px" height="20px" color="currentColor"/>
-            Gerenciar Quarteirões - {{ $subdivision->name }}
+            Quarteirões - Loteamento {{ $subdivision->name }}
+        </h2>
+        <h2 class="flex gap-2 items-center font-light text-sm text-gray-800 dark:text-gray-200 leading-tight">
+            Selecione um quarteirão para visualizar os terrenos que pertencem a ele.
         </h2>
     </x-slot>
 
@@ -23,26 +26,27 @@
                                 {{ ucfirst($block['status']) }}
                             </span>
                         </p>
+
+                        <!-- Exibindo informações sobre os terrenos -->
+                        <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            <p>Terrenos Ativos: <strong>{{ $block['activeLands'] }}</strong></p>
+                            <p>Terrenos Desativados: <strong>{{ $block['disabledLands'] }}</strong></p>
+                        </div>
                     </div>
 
                     <!-- Botões -->
                     <div class="mt-4 flex gap-2">
-
-                        <x-primary-button href="javascript:void(0)"
-                           wire:click="$dispatch('editCoordinateBlock', { id: {{ $block['id'] }} }); "
-                           class="w-full flex items-center justify-center">
-                            <x-edit-icon widht="20px" height="20px" color="currentColor"/>
-                            Editar
-                        </x-primary-button>
-                        <x-cancel-button onclick="desativarBlock({{ $block['id'] }})"
+                        <a href="{{ route('subdivision.lands', $block['id']) }}" class="w-full">
+                            <x-primary-button
                                 class="w-full flex items-center justify-center">
-                            <x-disable-icon widht="20px" height="20px" color="currentColor"/>
-                            Desativar
-                        </x-cancel-button>
+                                <x-view-icon widht="20px" height="20px" color="currentColor"/>
+                                Visualizar Terrenos
+                            </x-primary-button>
+                        </a>
                     </div>
                 </div>
             @endforeach
-                <livewire:components.modals.subdivisions.manage.edit-coordinate-block-modal/>
+            <livewire:components.modals.subdivisions.manage.edit-coordinate-block-modal/>
         </div>
     </div>
 </div>

@@ -31,7 +31,7 @@ new class extends Component{
                         <div class="mt-4">
                             <a href="{{ route('subdivision.manage', $subdivision->id) }}"
                                @click="$dispatch('open-modal', 'manage-subdivisions')"
-                               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+                               class="inline-flex items-center px-4 py-2 bg-yellow-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-600">
                                 Gerenciar o Loteamento
                             </a>
                         </div>
@@ -64,12 +64,12 @@ new class extends Component{
                             {{ __("Gerenciar Terrenos") }}
                         </h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Configure os quarteirões cadastrados vinculados ao Loteamento e aos Quarteirões acessado no momento.
+                            Configure os terrenos cadastrados vinculados ao Loteamento.
                         </p>
                         <div class="mt-4">
-                            <a href="#"
-                               class="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600">
-                                Personalizar
+                            <a href="{{ route('subdivision.blocks.lands.manage', $subdivision->id) }}"
+                               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+                                Gerenciar Terrenos
                             </a>
                         </div>
                     </div>
