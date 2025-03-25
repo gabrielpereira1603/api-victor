@@ -8,6 +8,7 @@ import './Subdivisions/create_subdivisions.js';
 import  './Subdivisions/view_one_subdivision.js'
 import './Blocks/create_blocks.js'
 import './Lands/create_lands.js'
+import './Lands/edit_map_coordinate.js'
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 

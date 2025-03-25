@@ -1,4 +1,4 @@
-<div>
+<div class="z-[10]">
     <x-slot name="header">
         <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             <x-area-icon width="20px" height="20px" color="currentColor"/>
@@ -9,12 +9,14 @@
         </h2>
     </x-slot>
 
+    <livewire:breadcrumb />
+
     <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($lands as $land)
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                     <!-- Mapa do Terreno -->
-                    <div id="land-map-{{ $land['id'] }}" class="w-full h-40 rounded-lg shadow-sm map-card-manage-land"></div>
+                    <div id="land-map-{{ $land['id'] }}" class="w-full h-40 rounded-lg shadow-sm map-card-manage-land z-[10]"> </div>
 
                     <!-- Informações do Terreno -->
                     <div class="mt-4">
@@ -31,7 +33,7 @@
                     <!-- Botões -->
                     <div class="mt-4 flex gap-2">
                         <x-primary-button href="javascript:void(0)"
-                                          wire:click="$dispatch('editLand', { id: {{ $land['id'] }} }); "
+                                          wire:click="$dispatch('editMapCoordinateLandModal', { id: {{ $land['id'] }} }); "
                                           class="w-full flex items-center justify-center">
                             <x-edit-icon width="20px" height="20px" color="currentColor"/>
                             Editar
@@ -44,6 +46,8 @@
                     </div>
                 </div>
             @endforeach
+                <livewire:components.modals.subdivisions.manage.lands.edit-map-coordinate-modal/>
+
         </div>
     </div>
 </div>

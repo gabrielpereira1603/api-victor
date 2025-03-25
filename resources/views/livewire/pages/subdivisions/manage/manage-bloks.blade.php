@@ -36,7 +36,7 @@
                         </x-primary-button>
                         <x-cancel-button onclick="desativarBlock({{ $block['id'] }})"
                                 class="w-full flex items-center justify-center">
-                            <x-disable-icon widht="20px" height="20px" color="currentColor"/>
+                            <x-delete-icon widht="20px" height="20px" color="currentColor"/>
                             Desativar
                         </x-cancel-button>
                     </div>

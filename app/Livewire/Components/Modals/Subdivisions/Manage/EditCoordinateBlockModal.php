@@ -10,6 +10,7 @@ use Livewire\Component;
 #[AllowDynamicProperties] class EditCoordinateBlockModal extends Component
 {
     public $block_id;
+
     public $coordinates = [];
 
     #[On('editCoordinateBlock')]
