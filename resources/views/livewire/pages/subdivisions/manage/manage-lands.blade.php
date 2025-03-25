@@ -36,7 +36,7 @@
 
                     <!-- Botões -->
                     <div class="mt-4 flex gap-2">
-                        <a href="{{ route('subdivision.lands', $block['id']) }}" class="w-full">
+                        <a href="{{ route('subdivision.landsByBlocks', $block['id']) }}" class="w-full">
                             <x-primary-button
                                 class="w-full flex items-center justify-center">
                                 <x-view-icon widht="20px" height="20px" color="currentColor"/>

@@ -1,23 +1,23 @@
 import L from "leaflet";
 
 document.addEventListener('DOMContentLoaded', () => {
-    const mapElement = document.getElementById('map-create-lands');
+    const mapElement = document.getElementById('map-edit-lands');
     if (!mapElement) return;
 
     const firstCoordinates = mapElement.dataset.first_coordinates;
     const blocksCoordinates = mapElement.dataset.blocks_coordinates;
     const landsCoordinates = mapElement.dataset.lands_coordinates;
+    const editLand = JSON.parse(mapElement.dataset.edit_land_coordinates || "null");
     const subdivisionCoordinates = mapElement.dataset.subdivision_coordinates;
     const subdivisionDetails = JSON.parse(mapElement.dataset.subdivision_details);
 
-
     if (firstCoordinates) {
-        initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinates, landsCoordinates, subdivisionDetails);
+        initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinates, landsCoordinates, editLand, subdivisionDetails);
     }
 });
 
-function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinates, landsCoordinates, subdivisionDetails) {
-    const map = L.map('map-create-lands', {
+function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinates, landsCoordinates, editLand, subdivisionDetails) {
+    const map = L.map('map-edit-lands', {
         center: firstCoordinates.split(',').map(parseFloat),
         zoom: 18,
         minZoom: 15,
@@ -28,69 +28,49 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         attribution: '© OpenStreetMap Contributors'
     }).addTo(map);
 
-    // Adiciona a funcionalidade de desenho e edição apenas para polígonos
-    const drawnItems = new L.FeatureGroup(); // Camada para armazenar os itens desenhados
+    const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems,
-            remove: true // Permite remover os desenhos
-        },
-        draw: {
-            polygon: {
-                shapeOptions: {
-                    color: 'green',
-                    weight: 5
-                }
+    // Apenas ativar edição para o terreno em edição
+    if (editLand) {
+        const editPolygon = L.polygon(JSON.parse(editLand.coordinates), {
+            color: 'red', // Destacar em vermelho
+            weight: 2,
+            fillColor: '#FF6347',
+            fillOpacity: 0.8
+        }).addTo(drawnItems);
+
+        editPolygon.bindPopup(`
+            <strong>Editando Terreno:</strong> ${editLand.name} <br>
+            <strong>Status:</strong> ${editLand.status}
+        `);
+
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems,
+                remove: false // Não permitir remover, apenas editar
             },
-            rectangle: false, // Não permitir retângulos
-            circle: false, // Não permitir círculos
-            marker: false, // Não permitir marcadores
-            polyline: false // Não permitir linhas
-        }
-    });
-    map.addControl(drawControl);
-
-    // Escutar o evento de criação e adicionar o polígono desenhado ao mapa
-    map.on(L.Draw.Event.CREATED, function (event) {
-        const layer = event.layer;
-        drawnItems.addLayer(layer);
-
-        // Corrigir a estrutura das coordenadas antes de enviar
-        const newCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
-
-        console.log('Enviando coordenadas para Livewire:', newCoordinates);
-
-        Livewire.dispatch('updateCoordinates', { coordinates: newCoordinates });
-
-        // Atualizar o valor do input hidden
-        const coordinatesInput = document.getElementById('coordinates');
-        if (coordinatesInput) {
-            coordinatesInput.value = JSON.stringify(newCoordinates);
-        }
-    });
-
-    // Escutar o evento de edição para atualizar as coordenadas
-    map.on(L.Draw.Event.EDITED, function (event) {
-        const layers = event.layers;
-
-        layers.eachLayer(function (layer) {
-            // Corrigir a estrutura das coordenadas depois da edição
-            const updatedCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
-
-            console.log('Coordenadas atualizadas para Livewire:', updatedCoordinates);
-
-            // Atualizar o valor do input hidden
-            const coordinatesInput = document.getElementById('coordinates');
-            if (coordinatesInput) {
-                coordinatesInput.value = JSON.stringify(updatedCoordinates);
-            }
-
-            // Enviar as coordenadas atualizadas para o Livewire
-            Livewire.dispatch('updateCoordinates', { coordinates: updatedCoordinates });
+            draw: false // Não permitir criação de novos polígonos
         });
-    });
+
+        map.addControl(drawControl);
+
+        // Atualizar coordenadas quando editado
+        map.on(L.Draw.Event.EDITED, function (event) {
+            event.layers.eachLayer(layer => {
+                const updatedCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
+
+                console.log('Enviando coordenadas para Livewire:', updatedCoordinates);
+
+                Livewire.dispatch('updateCoordinates', { coordinates: updatedCoordinates });
+
+                const coordinatesInput = document.getElementById('coordinates');
+                if (coordinatesInput) {
+                    coordinatesInput.value = JSON.stringify(updatedCoordinates);
+                }
+            });
+        });
+    }
 
     // Exibir Subdivisões, Quarteirões e Terrenos
     if (subdivisionCoordinates) {
@@ -132,7 +112,6 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         });
     }
 
-    // Exibir Lands (Terrenos)
     if (landsCoordinates) {
         const parsedLands = JSON.parse(landsCoordinates);
         parsedLands.forEach(land => {
@@ -156,6 +135,5 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
             });
         });
     }
-
 
 }

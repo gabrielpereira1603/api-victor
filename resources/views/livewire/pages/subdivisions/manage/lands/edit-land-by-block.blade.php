@@ -1,9 +1,9 @@
 <div>
     <x-slot name="header">
         <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <x-add-icon width="24px" height="24px" color="currentColor" />
+            <x-edit-icon width="24px" height="24px" color="currentColor" />
             <h2 class="text-xl font-semibold">
-                Cadastrar Terreno
+                Edição de terreno
             </h2>
         </div>
     </x-slot>
@@ -16,12 +16,13 @@
                     @csrf
                     @script
                     <script>
-                        $wire.on('validationFailed', () => {
+                        $wire.on('validationFailed', (event) => {
+                            console.log(event)
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Erro na validação',
-                                text: 'Por favor, revise os campos destacados no formulário!',
+                                text: event,
                                 confirmButtonColor: '#dc3545',
                             });
                         });
@@ -70,10 +71,13 @@
                             <div>
                                 <x-input-label for="blocks" value="Selecione o quarteirão da qual ele faz parte*" />
                                 @error('form.blocks') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <select name="blocks" id="blocks" wire:model="form.blocks" class="w-full border-gray-300 rounded-md shadow-sm">
+                                <select name="blocks" id="blocks" wire:model="form.block_id" class="w-full border-gray-300 rounded-md shadow-sm">
                                     <option value="">Selecione um quarteirão</option>
-                                    @foreach ($blocks as $block)
-                                        <option value="{{ $block->id }}" data-coordinates="{{ json_encode($block->coordinates) }}">
+                                    @foreach ($form->blocks as $block)
+                                        <option
+                                            value="{{ $block->id }}"
+                                            {{ $form->block_id == $block->id ? 'selected' : '' }}
+                                        >
                                             {{ $block->name }}
                                         </option>
                                     @endforeach
@@ -99,11 +103,6 @@
                     </div>
 
                     <div class="flex justify-end gap-4">
-                        <x-cancel-button onclick="window.location.href='{{ route('subdivision.view_one', $subdivision_id) }}'" class="flex gap-2 items-center">
-                            <x-cancel-icon width="20px" height="20px" color="currentColor" />
-                            {{ __('Voltar') }}
-                        </x-cancel-button>
-
                         <x-primary-button type="submit" wire:target="save" class="flex gap-2 items-center">
                             <x-save-icon width="20px" height="20px" color="currentColor" />
                             {{ __('Salvar Terreno') }}
@@ -116,12 +115,17 @@
                         <x-area-icon width="20px" height="20px" color="currentColor"/>
                         {{ __('Cadastrar Terreno') }}
                     </h2>
-                    <div id="map-create-lands"
+                    <div id="map-edit-lands"
                          class="w-full mt-5 h-screen relative z-0"
                          data-first_coordinates="{{ $first_coordinate }}"
                          data-blocks_coordinates="{{ $blocks_coordinate }}"
+                         data-edit_land_coordinates="{{ json_encode([
+                            'name' => $this->land->name,
+                            'status' => $this->land->status,
+                            'coordinates' => $this->land->coordinates
+                        ]) }}"
                          data-lands_coordinates="{{ $lands_coordinate }}"
-                         data-subdivision_coordinates="{{ $form->subdivision->coordinates }}"
+                         data-subdivision_coordinates="{{ $subdivision->coordinates }}"
                          data-subdivision_details="{{ json_encode($subdivision_details) }}"
                          wire:ignore
                     >

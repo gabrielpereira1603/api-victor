@@ -32,12 +32,14 @@
 
                     <!-- Botões -->
                     <div class="mt-4 flex gap-2">
-                        <x-primary-button href="javascript:void(0)"
-                                          wire:click="$dispatch('editMapCoordinateLandModal', { id: {{ $land['id'] }} }); "
-                                          class="w-full flex items-center justify-center">
-                            <x-edit-icon width="20px" height="20px" color="currentColor"/>
-                            Editar
-                        </x-primary-button>
+                        <a href="{{ route('subdivision.lands.edit', $land['id']) }}">
+                            <x-primary-button
+                                class="w-full flex items-center justify-center">
+                                <x-edit-icon width="20px" height="20px" color="currentColor"/>
+                                Editar
+                            </x-primary-button>
+                        </a>
+
                         <x-cancel-button onclick="desativarLand({{ $land['id'] }})"
                                          class="w-full flex items-center justify-center">
                             <x-delete-icon width="20px" height="20px" color="currentColor"/>
@@ -46,8 +48,6 @@
                     </div>
                 </div>
             @endforeach
-                <livewire:components.modals.subdivisions.manage.lands.edit-map-coordinate-modal/>
-
         </div>
     </div>
 </div>
