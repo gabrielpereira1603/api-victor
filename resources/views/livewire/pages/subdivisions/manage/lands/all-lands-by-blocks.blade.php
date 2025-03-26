@@ -16,7 +16,20 @@
         </div>
     </x-slot>
 
-    <livewire:breadcrumb />
+    <div>
+        @if(session('success') || session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        title: "{{ session('success') ? 'Sucesso!' : 'Erro!' }}",
+                        text: "{{ session('success') ?? session('error') }}",
+                        icon: "{{ session('success') ? 'success' : 'error' }}",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        @endif
+    </div>
 
     <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

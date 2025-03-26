@@ -117,13 +117,14 @@ class EditLandByBlock extends Component
             $success = $this->form->store($this->first_coordinate, $this->land->id);
 
             if ($success) {
-                session()->flash('success', 'Terreno cadastrado com sucesso!');
-                return redirect()->to('/subdivision/view_one/' . $this->subdivision->id);
+                session()->flash('success', 'Terreno editado com sucesso!');
+                return redirect()->to('subdivision/manage/lands/' . $this->block->id);
             } else {
-                return redirect()->to('/create-block');
+                return redirect()->to('subdivision/manage/lands/' . $this->block->id);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('validationFailed', $e->getMessage());
+            session()->flash('error', $e->getMessage());
             throw $e;
         }
     }

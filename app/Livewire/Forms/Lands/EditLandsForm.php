@@ -72,11 +72,11 @@ class EditLandsForm extends Form
 
             DB::commit();
 
-            session()->flash('success', 'Terreno cadastrado com sucesso!');
+            session()->flash('success', 'Terreno editado com sucesso!');
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erro ao cadastrar Terreno. Tente novamente.');
+            session()->flash('error', 'Erro ao editar Terreno. Tente novamente.');
             throw $e;
         }
     }

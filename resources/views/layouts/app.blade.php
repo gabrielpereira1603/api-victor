@@ -36,33 +36,6 @@
             .map-card-manage-block{
                 z-index: 0 !important;
             }
-
-            #add-blocks{
-                background: rgba(8, 131, 38, 0.95) !important;
-            }
-
-            #add-blocks:hover{
-                border: green solid 1px;
-                background: rgba(8, 131, 38, 0.85) !important;
-            }
-
-            #add-lands{
-                background: rgba(88, 116, 202, 0.93) !important;
-            }
-
-            #add-lands:hover{
-                border: blue solid 1px;
-                background: rgba(88, 116, 202, 0.85) !important;
-            }
-
-            #edit-subdivisions{
-                background: rgb(216, 187, 48) !important;
-            }
-
-            #edit-subdivisions:hover{
-                border: yellow solid 1px;
-                background: rgba(216, 187, 48, 0.94) !important;
-            }
         </style>
 
     </head>
