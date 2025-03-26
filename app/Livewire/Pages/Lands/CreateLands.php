@@ -40,9 +40,9 @@ class CreateLands extends Component
 
             if ($success) {
                 session()->flash('success', 'Terreno cadastrado com sucesso!');
-                return redirect()->to('/subdivision/view_one/' . $this->form->subdivision->id);
+                return redirect()->to('/lands/create/' . $this->form->subdivision->id);
             } else {
-                return redirect()->to('/create-block');
+                return redirect()->to('/lands/create/' . $this->form->subdivision->id);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('validationFailed');

@@ -12,7 +12,20 @@
             </a>
         </div>
     </x-slot>
-
+    <div>
+        @if(session('success') || session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        title: "{{ session('success') ? 'Sucesso!' : 'Erro!' }}",
+                        text: "{{ session('success') ?? session('error') }}",
+                        icon: "{{ session('success') ? 'success' : 'error' }}",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        @endif
+    </div>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
