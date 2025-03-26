@@ -1,13 +1,17 @@
 <div>
     <x-slot name="header">
-        <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <x-add-icon width="24px" height="24px" color="currentColor" />
-            <h2 class="text-xl font-semibold">
-                Cadastrar Terreno
-            </h2>
+        <div class="flex justify-between items-center text-gray-900 dark:text-gray-100">
+            <div class="flex items-center gap-2">
+                <x-add-icon width="24px" height="24px" color="currentColor" />
+                <h2 class="text-xl font-semibold">
+                    Cadastrar Terreno
+                </h2>
+            </div>
+            <a href="{{ route('subdivision.view_one', $subdivision_id) }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                Voltar
+            </a>
         </div>
     </x-slot>
-    <livewire:breadcrumb />
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

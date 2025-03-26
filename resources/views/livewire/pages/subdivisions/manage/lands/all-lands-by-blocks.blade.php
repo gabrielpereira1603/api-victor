@@ -1,12 +1,19 @@
 <div class="z-[10]">
     <x-slot name="header">
-        <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-area-icon width="20px" height="20px" color="currentColor"/>
-            Terrenos do {{ $block->name }}
-        </h2>
-        <h2 class="flex gap-2 items-center font-light text-sm text-gray-800 dark:text-gray-200 leading-tight">
-            Selecione um terreno para visualizar mais detalhes.
-        </h2>
+        <div class="flex justify-between items-center text-gray-900 dark:text-gray-100">
+            <div class="flex flex-col items-start justify-start gap-2">
+                <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    <x-area-icon width="20px" height="20px" color="currentColor"/>
+                    Terrenos do {{ $block->name }}
+                </h2>
+                <h2 class="flex gap-2 items-center font-light text-sm text-gray-800 dark:text-gray-200 leading-tight">
+                    Selecione um terreno para visualizar mais detalhes.
+                </h2>
+            </div>
+            <a href="{{ route('subdivision.blocks.lands.manage', $subdivision_id) }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                Voltar
+            </a>
+        </div>
     </x-slot>
 
     <livewire:breadcrumb />
@@ -22,10 +29,18 @@
                     <div class="mt-4">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ $land['name'] }}</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Código: <strong>{{ $land['code'] }}</strong></p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Área: <strong>{{ $land['area'] }} m²</strong></p>
+
+                        <div class="flex flex-col gap-1 mb-1 mt-1">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Área: <strong>{{ $land['area'] }} m²</strong></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Tamanho de frente: <strong>{{ $land['front_size'] }} m</strong></p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Tamanho de fundo: <strong>{{ $land['background_size'] }} m</strong></p>
+                        </div>
+
+
                         <p class="text-sm text-gray-600 dark:text-gray-400">Status:
-                            <span class="px-2 py-1 rounded-md text-white text-xs font-semibold {{ $land['status'] == 'active' ? 'bg-green-500' : 'bg-red-500' }}">
-                                {{ ucfirst($land['status']) }}
+                            <span class="px-2 py-1 rounded-md text-white text-xs font-semibold
+                                {{ $land['status'] == 'Disponível' ? 'bg-green-500' : ($land['status'] == 'Reservado' ? 'bg-yellow-500' : 'bg-red-500') }}">
+                                {{ $land['status'] }}
                             </span>
                         </p>
                     </div>

@@ -65,6 +65,8 @@ class EditLandsForm extends Form
                 'first_coordinate' => $first_coordinate,
                 'status' => $this->status,
                 'area' => $this->area,
+                'background_size' => $this->background_size,
+                'front_size' => $this->front_size,
                 'color' => $this->color,
             ]);
 

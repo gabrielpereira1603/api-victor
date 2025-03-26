@@ -130,7 +130,6 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
 
     // Exibir Lands (Terrenos)
     if (landsCoordinates) {
-        conso
         const parsedLands = JSON.parse(landsCoordinates);
         parsedLands.forEach(land => {
             const polygon = L.polygon(JSON.parse(land.coordinates), {

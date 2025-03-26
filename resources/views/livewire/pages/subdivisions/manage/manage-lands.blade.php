@@ -1,12 +1,20 @@
 <div>
     <x-slot name="header">
-        <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-area-icon width="20px" height="20px" color="currentColor"/>
-            Quarteirões - Loteamento {{ $subdivision->name }}
-        </h2>
-        <h2 class="flex gap-2 items-center font-light text-sm text-gray-800 dark:text-gray-200 leading-tight">
-            Selecione um quarteirão para visualizar os terrenos que pertencem a ele.
-        </h2>
+        <div class="flex justify-between items-center text-gray-900 dark:text-gray-100">
+            <div class="flex flex-col items-center gap-2">
+                <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    <x-area-icon width="20px" height="20px" color="currentColor"/>
+                    Quarteirões - Loteamento {{ $subdivision->name }}
+                </h2>
+                <h2 class="flex gap-2 items-center font-light text-sm text-gray-800 dark:text-gray-200 leading-tight">
+                    Selecione um quarteirão para visualizar os terrenos que pertencem a ele.
+                </h2>
+            </div>
+            <a href="{{ route('subdivision.view_one', $subdivision->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                Voltar
+            </a>
+        </div>
+
     </x-slot>
 
     <div class="container mx-auto px-4 py-6">
@@ -30,7 +38,8 @@
                         <!-- Exibindo informações sobre os terrenos -->
                         <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             <p>Terrenos Ativos: <strong>{{ $block['activeLands'] }}</strong></p>
-                            <p>Terrenos Desativados: <strong>{{ $block['disabledLands'] }}</strong></p>
+                            <p>Terrenos Reservados: <strong>{{ $block['disabledLands'] }}</strong></p>
+                            <p>Terrenos Desativados: <strong>{{ $block['reservedLands'] }}</strong></p>
                         </div>
                     </div>
 

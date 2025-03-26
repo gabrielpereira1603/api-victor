@@ -52,6 +52,8 @@ class ViewOneSubdivision extends Component
                 'color' => $land->color,
                 'area' => $land->area,
                 'code' => $land->code,
+                'front_size' => $land->front_size,
+                'background_size' => $land->background_size
             ];
         });
 
@@ -65,6 +67,8 @@ class ViewOneSubdivision extends Component
                     'color' => $land->color,
                     'area' => $land->area,
                     'code' => $land->code,
+                    'front_size' => $land->front_size,
+                    'background_size' => $land->background_size
                 ];
             });
         });

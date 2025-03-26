@@ -10,10 +10,13 @@ class AllLandsByBlocks extends Component
 {
     public $block;
     public $lands;
+    public $subdivision_id;
 
     public function mount($block_id)
     {
         $this->block = Blocks::findOrFail($block_id);
+        $this->subdivision_id = $this->block->subdivision_id;
+
         $this->lands = $this->block->lands->map(function ($land) {
             return [
                 'id' => $land->id,
@@ -23,6 +26,8 @@ class AllLandsByBlocks extends Component
                 'status' => $land->status,
                 'color' => $land->color,
                 'area' => $land->area,
+                'background_size' => $land->background_size,
+                'front_size' => $land->front_size,
             ];
         });
     }

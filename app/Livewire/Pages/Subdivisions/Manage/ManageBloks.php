@@ -22,6 +22,7 @@ class ManageBloks extends Component
                 'color' => $block->color,
                 'area' => $block->area,
                 'code' => $block->code,
+
             ];
         });
     }

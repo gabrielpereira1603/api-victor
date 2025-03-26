@@ -67,6 +67,8 @@ class EditLandByBlock extends Component
                     'code' => $land->code,
                     'status' => $land->status,
                     'area' => $land->area,
+                    'front_size' => $land->front_size,
+                    'background_size' => $land->background_size,
                     'coordinates' => $land->coordinates,
                 ];
             })
@@ -92,6 +94,9 @@ class EditLandByBlock extends Component
 
         $this->form->status = $land->status;
         $this->form->area = $land->area;
+        $this->form->background_size = $land->background_size;
+        $this->form->front_size = $land->front_size;
+
         $this->form->color = $land->color;
 
         $this->form->blocks = $this->block;
