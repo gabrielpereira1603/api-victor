@@ -45,6 +45,8 @@ class CreateLandsForm extends Form
 
     public function store($first_coordinate)
     {
+        $this->area = round($this->background_size * $this->front_size, 2);
+
         if ($this->status == 'Disponível') {
             $this->color = 'green';
         } elseif ($this->status == 'Reservado') {

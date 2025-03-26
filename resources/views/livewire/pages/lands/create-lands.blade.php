@@ -45,6 +45,8 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" class="w-full hidden" disabled/>
                             <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
+                            <x-text-input type="number" step="0.01" name="area" wire:model="form.area" placeholder="Ex: 100,00 m²" id="area" class="w-full hidden" />
+
                             <div>
                                 <x-input-label for="name" value="Nome do Terreno*" />
                                 @error('form.name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -78,11 +80,6 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <x-input-label for="area" value="Área (m²)*" />
-                                @error('form.area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="number" step="0.01" name="area" wire:model="form.area" placeholder="Ex: 100,00 m²" id="area" class="w-full" />
-                            </div>
                             <div>
                                 <x-input-label for="background_size" value="Tamanho de fundo (m)*" />
                                 @error('form.background_size') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror

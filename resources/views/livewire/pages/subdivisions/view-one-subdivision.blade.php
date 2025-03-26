@@ -152,7 +152,7 @@
             <div>
                 <a href="{{ route('lands.create', $subdivision->id) }}" class="flex w-full gap-4 mt-4 mb-4">
                     <x-primary-button class="flex-1 justify-center" id="add-lands"
-                                      color="purple-500" hoverColor="purple-500/90" focusColor="purple-500" activeColor="purple-900" textColor="white"
+                                      color="purple-600" hoverColor="purple-600/90" focusColor="purple-600" activeColor="purple-900" textColor="white"
                                       href="javascript:void(0)"
                     >
                         <x-add-icon width="20px" height="20px" color="currentColor"/>
