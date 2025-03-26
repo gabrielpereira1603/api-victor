@@ -41,8 +41,11 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         }).addTo(drawnItems);
 
         editPolygon.bindPopup(`
-            <strong>Editando Terreno:</strong> ${editLand.name} <br>
-            <strong>Status:</strong> ${editLand.status}
+            <p><strong>Código:</strong> ${editLand.code}</p>
+            <p><strong>Área:</strong> ${editLand.area} m²</p>
+            <p><strong>Tamanho de frente:</strong> ${editLand.front_size} m</p>
+            <p><strong>Tamanho de fundo:</strong> ${editLand.background_size} m</p>
+            <p><strong>Status:</strong> ${editLand.status}</p>
         `);
 
         const drawControl = new L.Control.Draw({
@@ -126,10 +129,12 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
                 L.popup()
                     .setLatLng(polygon.getBounds().getCenter())
                     .setContent(`
-                        <strong>Terreno:</strong> ${land.name} <br>
-                        <strong>Código:</strong> ${land.code} <br>
-                        <strong>Status:</strong> ${land.status} <br>
-                        <strong>Área:</strong> ${land.area} m²
+                        <p><strong>Código:</strong> ${land.code}</p>
+                        <p><strong>Área:</strong> ${land.area} m²</p>
+                        <p><strong>Tamanho de frente:</strong> ${land.front_size} m</p>
+                        <p><strong>Tamanho de fundo:</strong> ${land.background_size}m</p>
+                        <p><strong>Status:</strong> ${land.status}</p>
+
                     `)
                     .openOn(map);
             });

@@ -96,6 +96,13 @@ class EditLandByBlock extends Component
         $this->form->area = $land->area;
         $this->form->background_size = $land->background_size;
         $this->form->front_size = $land->front_size;
+        if (is_string($land->coordinates)) {
+            $this->form->coordinates = json_decode($land->coordinates, true);
+        } elseif (is_array($land->coordinates)) {
+            $this->form->coordinates = $land->coordinates;
+        } else {
+            $this->form->coordinates = [];
+        }
 
         $this->form->color = $land->color;
 

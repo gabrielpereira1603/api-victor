@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         landPolygon.bindPopup(`<h3>${land.name}</h3>
             <p><strong>Código:</strong> ${land.code}</p>
+            <p><strong>Área:</strong> ${land.area}</p>
+            <p><strong>Tamanho de frente:</strong> ${land.front_size}</p>
+            <p><strong>Tamanho de fundo:</strong> ${land.background_size}</p>
             <p><strong>Status:</strong> ${land.status}</p>
         `);
 

@@ -133,9 +133,9 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         const parsedLands = JSON.parse(landsCoordinates);
         parsedLands.forEach(land => {
             const polygon = L.polygon(JSON.parse(land.coordinates), {
-                color: landsCoordinates.color || 'red',
+                color: land.color || 'red',
                 weight: 2,
-                fillColor: landsCoordinates.color || 'red',
+                fillColor: land.color || 'red',
                 fillOpacity: 0.6
             }).addTo(map);
 
@@ -143,10 +143,11 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
                 L.popup()
                     .setLatLng(polygon.getBounds().getCenter())
                     .setContent(`
-                        <strong>Terreno:</strong> ${land.name} <br>
-                        <strong>Código:</strong> ${land.code} <br>
-                        <strong>Status:</strong> ${land.status} <br>
-                        <strong>Área:</strong> ${land.area} m²
+                        <p><strong>Código:</strong> ${land.code}</p>
+                        <p><strong>Área:</strong> ${land.area}</p>
+                        <p><strong>Tamanho de frente:</strong> ${land.front_size}</p>
+                        <p><strong>Tamanho de fundo:</strong> ${land.background_size}</p>
+                        <p><strong>Status:</strong> ${land.status}</p>
                     `)
                     .openOn(map);
             });

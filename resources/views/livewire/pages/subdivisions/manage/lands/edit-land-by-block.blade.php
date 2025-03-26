@@ -134,9 +134,13 @@
                          data-first_coordinates="{{ $first_coordinate }}"
                          data-blocks_coordinates="{{ $blocks_coordinate }}"
                          data-edit_land_coordinates="{{ json_encode([
+                            'code' => $this->land->code,
                             'name' => $this->land->name,
                             'status' => $this->land->status,
-                            'coordinates' => $this->land->coordinates
+                            'coordinates' => $this->land->coordinates,
+                            'area' => $land->area,
+                            'front_size' => $land->front_size,
+                            'background_size' => $land->background_size,
                         ]) }}"
                          data-lands_coordinates="{{ $lands_coordinate }}"
                          data-subdivision_coordinates="{{ $subdivision->coordinates }}"
