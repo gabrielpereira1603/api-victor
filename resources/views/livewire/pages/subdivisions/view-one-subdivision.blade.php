@@ -81,12 +81,10 @@
         </div>
     </div>
 
-    <div class="p-6 flex flex-col sm:flex-row">
-
+    <div class="p-6 flex flex-col sm:flex-row ">
         <!-- Mapa à esquerda -->
-        <div id="view-one-subdivision-map" class="
-        sm:w-2/3 sm:h-screen sm:relative z-0 sm:rounded-l-[10px]
-        w-full h-screen rounded-t-[10px]"
+        <div id="view-one-subdivision-map"
+             class="sm:w-2/3 sm:h-screen sm:relative z-0 w-full h-screen sm:rounded-l-lg rounded-t-lg"
              data-coordinates-subdivision="{{ json_encode($coordinates) }}"
              data-subdivision="{{ json_encode([
                  'name' => $subdivision->name,
@@ -104,9 +102,7 @@
         </div>
 
         <!-- Painel à direita -->
-        <div class="
-        sm:w-1/3 bg-white sm:p-6 sm:h-screen sm:overflow-y-auto sm:rounded-r-[10px] shadow-sm shadow-gray-600/20
-        rounded-b-[10px] p-6">
+        <div class="sm:w-1/3 bg-white sm:p-6 sm:h-screen sm:overflow-y-auto shadow-sm shadow-gray-600/20 p-6 sm:rounded-r-lg rounded-b-lg">
             <h2 class="flex items-center text-2xl font-bold mb-4 gap-1">
                 <x-config-icon width="20px" height="20px" color="currentColor"/>
                 Painel de Gerenciamento
@@ -129,6 +125,7 @@
                 <a href="" class="flex w-full gap-4 mt-4 mb-4">
                     <x-primary-button class="flex-1 justify-center" id="add-blocks"
                                       color="[#004F6D]" hoverColor="[#004F6D]/90" focusColor="[#004F6D]" activeColor="[#004F6D]" textColor="white"
+                                      darkColor="[#004F6D]" darkHoverColor="[#004F6D]/90" darkFocusColor="[#004F6D]" darkActiveColor="[#004F6D]" darkTextColor="white"
                                       href="javascript:void(0)"
                     >
                         <x-edit-icon width="22px" height="22px" color="currentColor"/>

@@ -31,6 +31,8 @@ class ManageLands extends Component
                 'reservedLands' => $reservedLands
             ];
         });
+
+        dd($this->blocks);
     }
 
     public function render()

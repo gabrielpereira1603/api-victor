@@ -45,8 +45,9 @@
                         <p class="text-sm text-gray-600 dark:text-gray-400">Código: <strong>{{ $block['code'] }}</strong></p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Área: <strong>{{ $block['area'] }} m²</strong></p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Status:
-                            <span class="px-2 py-1 rounded-md text-white text-xs font-semibold {{ $block['status'] == 'ativo' ? 'bg-red-500' : 'bg-green-500' }}">
-                                {{ ucfirst($block['status']) }}
+                            <span class="px-2 py-1 rounded-md text-white text-xs font-semibold
+                                {{ $block['status'] == 'Disponível' ? 'bg-green-500' : ($block['status'] == 'Reservado' ? 'bg-yellow-500' : 'bg-red-500') }}">
+                                {{ $block['status'] }}
                             </span>
                         </p>
 
@@ -62,7 +63,9 @@
                     <div class="mt-4 flex gap-2">
                         <a href="{{ route('subdivision.landsByBlocks', $block['id']) }}" class="w-full">
                             <x-primary-button
-                                class="w-full flex items-center justify-center">
+                                class="w-full flex items-center justify-center"
+                                color="gray-800" hoverColor="gray-800/90" focusColor="gray-900" activeColor="gray-800" textColor="white"
+                            >
                                 <x-view-icon widht="20px" height="20px" color="currentColor"/>
                                 Visualizar Terrenos
                             </x-primary-button>

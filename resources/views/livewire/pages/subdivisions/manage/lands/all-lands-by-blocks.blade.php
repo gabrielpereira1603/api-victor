@@ -60,7 +60,7 @@
 
                     <!-- Botões -->
                     <div class="mt-4 flex gap-2">
-                        <a href="{{ route('subdivision.lands.edit', $land['id']) }}">
+                        <a href="{{ route('subdivision.lands.edit', $land['id']) }}" class="w-full">
                             <x-primary-button
                                 class="w-full flex items-center justify-center">
                                 <x-edit-icon width="20px" height="20px" color="currentColor"/>

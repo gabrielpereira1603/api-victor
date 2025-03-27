@@ -4,7 +4,7 @@
             <div class="flex items-center gap-2">
                 <x-edit-icon width="24px" height="24px" color="currentColor" />
                 <h2 class="text-xl font-semibold">
-                    Editar de terreno
+                    Editar Terreno
                 </h2>
             </div>
             <a href="{{ route('subdivision.landsByBlocks', $block->id) }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
@@ -47,21 +47,20 @@
 
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div>
-                                <x-input-label for="first_coordinate" value="Cordenada Inicial*" />
-                                <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" placeholder="Ex: -23.5505, -46.6333" class="w-full" disabled/>
-                                <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
-                            </div>
+                            <x-text-input type="text" name="first_coordinate" wire:model.change="first_coordinate" class="w-full hidden" disabled/>
+                            <x-text-input type="text" id="coordinates" wire:model="form.coordinates" name="coordinates" class="w-full hidden" disabled/>
+                            <x-text-input type="number" step="0.01" name="area" wire:model="form.area" id="area" class="w-full hidden" />
+                            @error('form.area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
                             <div>
                                 <x-input-label for="name" value="Nome do Terreno*" />
                                 @error('form.name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="name" wire:model="form.name" placeholder="Ex: Quarteirão A" id="name" class="w-full" />
+                                <x-text-input type="text" name="name" wire:model="form.name" placeholder="Ex: Terreno A1" id="name" class="w-full" />
                             </div>
                             <div>
                                 <x-input-label for="code" value="Código do Terreno*" />
                                 @error('form.code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="text" name="code" wire:model="form.code" placeholder="Ex: A" id="code" class="w-full" />
+                                <x-text-input type="text" name="code" wire:model="form.code" placeholder="Ex: A1" id="code" class="w-full" />
                             </div>
                             <div>
                                 <x-input-label for="status" value="Status*" />
@@ -90,36 +89,30 @@
                             </div>
 
                             <div>
-                                <x-input-label for="area" value="Área (m²)*" />
-                                @error('form.area') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <x-text-input type="number" step="0.01" name="area" wire:model="form.area" placeholder="Ex: 100,00 m²" id="area" class="w-full" />
-                            </div>
-                            <div>
                                 <x-input-label for="background_size" value="Tamanho de fundo (m)*" />
                                 @error('form.background_size') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 <x-text-input type="number" step="0.01" name="background_size" wire:model="form.background_size" placeholder="Ex: 100,00 m" id="background_size" class="w-full" />
                             </div>
+
                             <div>
                                 <x-input-label for="front_size" value="Tamanho de frente (m)*" />
                                 @error('form.front_size') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 <x-text-input type="number" step="0.01" name="front_size" wire:model="form.front_size" placeholder="Ex: 100,00 m" id="front_size" class="w-full" />
                             </div>
-                            <div>
-                                <x-input-label for="color" value="Cor*" />
-                                @error('form.color') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                <div class="flex items-center gap-2">
-                                    <input type="color" wire:model="form.color" id="color" class="w-10 h-10 p-0 border rounded-md" />
-
-                                    <x-text-input type="text" wire:model="form.color" id="color_code" class="w-full" placeholder="#000000" />
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <div class="flex justify-end gap-4">
+                        <a href="{{ route('subdivision.landsByBlocks', $block->id) }}">
+                            <x-cancel-button type="submit" wire:target="save" class="flex gap-2 items-center">
+                                <x-save-icon width="20px" height="20px" color="currentColor" />
+                                {{ __('Descartar Alterações') }}
+                            </x-cancel-button>
+                        </a>
+
                         <x-primary-button type="submit" wire:target="save" class="flex gap-2 items-center">
                             <x-save-icon width="20px" height="20px" color="currentColor" />
-                            {{ __('Salvar Terreno') }}
+                            {{ __('Salvar Alterações') }}
                         </x-primary-button>
                     </div>
                 </form>
@@ -127,7 +120,7 @@
                 <div class="container-map-create-lands" >
                     <h2 class="flex gap-2 items-center font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         <x-area-icon width="20px" height="20px" color="currentColor"/>
-                        {{ __('Cadastrar Terreno') }}
+                        {{ __('Editar marcação do terreno') }}
                     </h2>
                     <div id="map-edit-lands"
                          class="w-full mt-5 h-screen relative z-0"

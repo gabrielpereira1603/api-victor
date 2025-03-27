@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
 
     const subdivisionPolygon = L.polygon(coordinates, {
-        color: 'yellow',
-        fillColor: 'yellow',
+        color: '#004f6d',
+        fillColor: '#004f6d',
         fillOpacity: 0.2
     }).addTo(map);
 
@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const blockPolygons = blocksData.map(block => {
         const blockCoordinates = block.coordinates.map(coord => coord.map(Number));
         const blockPolygon = L.polygon(blockCoordinates, {
-            color: 'green',
-            fillColor: 'green',
+            color: '#f97316',
+            fillColor: '#f97316',
             fillOpacity: 0.2
         }).addTo(map);
 
@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const landPolygons = landsData.map(land => {
         const landCoordinates = land.coordinates.map(coord => coord.map(Number)); // Corrigido
         const landPolygon = L.polygon(landCoordinates, {
-            color: land.color || 'blue',
-            fillColor:  land.color || 'blue',
+            color: land.color || '#9333ea',
+            fillColor:  land.color || '#9333ea',
             fillOpacity: 0.4
         }).addTo(map);
 
