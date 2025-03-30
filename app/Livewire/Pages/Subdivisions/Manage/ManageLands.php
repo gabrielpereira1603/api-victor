@@ -26,19 +26,11 @@ class ManageLands extends Component
                 'color' => $block->color,
                 'area' => $block->area,
                 'code' => $block->code,
-                'lands' => $block->lands->map(function ($land) {
-                    return [
-                        'id' => $land->id,
-                        'coordinates' => $land->coordinates ? json_decode($land->coordinates, true) : [],
-                        'status' => $land->status
-                    ];
-                }),
                 'activeLands' => $activeLands,
                 'disabledLands' => $disabledLands,
                 'reservedLands' => $reservedLands
 
             ];
-
         });
     }
 

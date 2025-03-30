@@ -32,58 +32,6 @@
         @endif
     </div>
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="w-full gap-6 mt-5">
-            <div class="w-full ">
-                <div id="subdivision-map"  class="w-full h-80 rounded-[10px]"></div>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Criar um mapa centrado no primeiro quarteirão (caso tenha coordenadas)
-            @if(count($blocks) > 0)
-            const firstBlock = {!! json_encode($blocks[0]['coordinates']) !!};
-            const map = L.map('subdivision-map', {
-                center: firstBlock[0] ?? [-23.5505, -46.6333], // Coordenada default (São Paulo)
-                zoom: 16
-            });
-
-            // Adicionar tile do OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap Contributors'
-            }).addTo(map);
-
-            // Adicionar cada bloco ao mapa
-            @foreach($blocks as $block)
-            const blockCoords{{ $block['id'] }} = {!! json_encode($block['coordinates']) !!};
-            if (blockCoords{{ $block['id'] }} && blockCoords{{ $block['id'] }}.length > 0) {
-                L.polygon(blockCoords{{ $block['id'] }}, {
-                    color: '{{ $block['color'] ?? "blue" }}',
-                    fillColor: '{{ $block['color'] ?? "#3f3" }}',
-                    fillOpacity: 0.4
-                }).addTo(map)
-                    .bindPopup("<b>{{ $block['name'] }}</b><br>Código: {{ $block['code'] }}<br>Área: {{ $block['area'] }} m²");
-            }
-
-            // Adicionar terrenos dentro de cada bloco
-            @foreach($block['lands'] as $land)
-            const landCoords{{ $land['id'] }} = {!! json_encode($land['coordinates']) !!};
-            if (landCoords{{ $land['id'] }} && landCoords{{ $land['id'] }}.length > 0) {
-                L.polygon(landCoords{{ $land['id'] }}, {
-                    color: '{{ $land['status'] == "Disponível" ? "green" : ($land['status'] == "Reservado" ? "yellow" : "red") }}',
-                    fillColor: '{{ $land['status'] == "Disponível" ? "#4CAF50" : ($land['status'] == "Reservado" ? "#FFC107" : "#F44336") }}',
-                    fillOpacity: 0.6
-                }).addTo(map)
-                    .bindPopup("<b>Terreno</b><br>Status: {{ $land['status'] }}");
-            }
-            @endforeach
-            @endforeach
-            @endif
-        });
-    </script>
-
-
     <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($blocks as $block)
