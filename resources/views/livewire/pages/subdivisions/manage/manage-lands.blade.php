@@ -32,7 +32,13 @@
         @endif
     </div>
 
-    <div id="subdivision-map" class="w-full h-96 rounded-lg shadow-md"></div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full gap-6 mt-5">
+            <div class="w-full ">
+                <div id="subdivision-map"  class="w-full h-80 rounded-[10px]"></div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Criar um mapa centrado no primeiro quarteirão (caso tenha coordenadas)
