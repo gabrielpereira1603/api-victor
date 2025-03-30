@@ -20,7 +20,7 @@ ${e?'Expression: "'+e+`"
     `);const d=c.map(w=>{const C=w.coordinates.map(O=>O.map(Number)),z=Q.polygon(C,{color:"#f97316",fillColor:"#f97316",fillOpacity:.2}).addTo(s);return z.bindPopup(`<h3>${w.name}</h3>
             <p><strong>Área:</strong> ${w.area?w.area+" m²":"N/A"}</p>
             <p><strong>Status:</strong> ${w.status}</p>
-        `),{id:w.id,polygon:z}}),p=o.map(w=>{const C=w.coordinates.map(P=>P.map(Number)),z=Q.polygon(C,{color:w.color||"#9333ea",fillColor:w.color||"#9333ea",fillOpacity:.4}).addTo(s),O=z.getBounds().getCenter(),k=Q.circleMarker(O,{radius:10,color:"#000",fillColor:"#fff",fillOpacity:1,weight:2}).addTo(s);return k.bindTooltip(w.code,{permanent:!0,direction:"center",className:"land-tooltip"}),k.on("click",()=>{k.bindPopup(`<h3>${w.name}</h3>
+        `),{id:w.id,polygon:z}}),p=o.map(w=>{const C=w.coordinates.map(P=>P.map(Number)),z=Q.polygon(C,{color:w.color||"#9333ea",fillColor:w.color||"#9333ea",fillOpacity:.4}).addTo(s),O=z.getBounds().getCenter(),k=Q.circleMarker(O,{radius:10,color:"#000",fillColor:"#fff",fillOpacity:1,weight:2}).addTo(s);return k.bindTooltip(`<span style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: white; border: 2px solid black; font-weight: bold;">${w.code}</span>`,{permanent:!0,direction:"center",className:"land-tooltip"}),k.on("click",()=>{k.bindPopup(`<h3>${w.name}</h3>
                 <p><strong>Código:</strong> ${w.code}</p>
                 <p><strong>Área:</strong> ${w.area}</p>
                 <p><strong>Tamanho de frente:</strong> ${w.front_size}</p>
