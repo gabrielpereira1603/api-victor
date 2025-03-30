@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const blocksData = JSON.parse(mapElement.dataset.blocks);
     const landsData = JSON.parse(mapElement.dataset.lands);
 
-
     if (Array.isArray(coordinates) && coordinates.length > 0) {
         coordinates = coordinates.map(coord => coord.map(Number));
     } else {
@@ -61,22 +60,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const landPolygons = landsData.map(land => {
-        const landCoordinates = land.coordinates.map(coord => coord.map(Number)); // Corrigido
+        const landCoordinates = land.coordinates.map(coord => coord.map(Number));
         const landPolygon = L.polygon(landCoordinates, {
             color: land.color || '#9333ea',
-            fillColor:  land.color || '#9333ea',
+            fillColor: land.color || '#9333ea',
             fillOpacity: 0.4
         }).addTo(map);
 
-        landPolygon.bindPopup(`<h3>${land.name}</h3>
-            <p><strong>Código:</strong> ${land.code}</p>
-            <p><strong>Área:</strong> ${land.area}</p>
-            <p><strong>Tamanho de frente:</strong> ${land.front_size}</p>
-            <p><strong>Tamanho de fundo:</strong> ${land.background_size}</p>
-            <p><strong>Status:</strong> ${land.status}</p>
-        `);
+        const center = landPolygon.getBounds().getCenter();
+        const landMarker = L.circleMarker(center, {
+            radius: 10,
+            color: '#000',
+            fillColor: '#fff',
+            fillOpacity: 1,
+            weight: 2
+        }).addTo(map);
 
-        return { id: land.id, polygon: landPolygon };
+        landMarker.bindTooltip(land.code, { permanent: true, direction: "center", className: "land-tooltip" });
+
+        landMarker.on('click', () => {
+            landMarker.bindPopup(`<h3>${land.name}</h3>
+                <p><strong>Código:</strong> ${land.code}</p>
+                <p><strong>Área:</strong> ${land.area}</p>
+                <p><strong>Tamanho de frente:</strong> ${land.front_size}</p>
+                <p><strong>Tamanho de fundo:</strong> ${land.background_size}</p>
+                <p><strong>Status:</strong> ${land.status}</p>
+            `).openPopup();
+        });
+
+        return { id: land.id, polygon: landPolygon, marker: landMarker };
     });
 
     // Função para alternar visibilidade
@@ -84,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = polygons.find(p => p[key] === parseInt(id));
         if (item) {
             isChecked ? item.polygon.addTo(map) : map.removeLayer(item.polygon);
+            if (item.marker) {
+                isChecked ? item.marker.addTo(map) : map.removeLayer(item.marker);
+            }
         }
     };
 

@@ -14,10 +14,6 @@ class ManageLands extends Component
     {
         $this->subdivision = Subdivision::findOrFail($subdivision_id);
         $this->blocks = $this->subdivision->blocks->map(function ($block) {
-            // Contar o número de terrenos ativos e desativados
-            $activeLands = $block->lands->where('status', 'Disponível')->count();
-            $disabledLands = $block->lands->where('status', 'Indisponível')->count();
-            $reservedLands = $block->lands->where('status', 'Reservado')->count();
             return [
                 'id' => $block->id,
                 'name' => $block->name,
@@ -26,12 +22,17 @@ class ManageLands extends Component
                 'color' => $block->color,
                 'area' => $block->area,
                 'code' => $block->code,
-                'activeLands' => $activeLands,
-                'disabledLands' => $disabledLands,
-                'reservedLands' => $reservedLands
+                'lands' => $block->lands->map(function ($land) {
+                    return [
+                        'id' => $land->id,
+                        'coordinates' => $land->coordinates ? json_decode($land->coordinates, true) : [],
+                        'status' => $land->status
+                    ];
+                })
             ];
         });
     }
+
 
     public function render()
     {
