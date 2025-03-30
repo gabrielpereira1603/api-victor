@@ -1,4 +1,5 @@
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 document.addEventListener('DOMContentLoaded', () => {
     const mapElement = document.getElementById('view-one-subdivision-map');
@@ -76,7 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
             weight: 2
         }).addTo(map);
 
-        landMarker.bindTooltip(land.code, { permanent: true, direction: "center", className: "land-tooltip" });
+        landMarker.bindTooltip(`<span style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: white; border: 2px solid black; font-weight: bold;">${land.code}</span>`, {
+            permanent: true,
+            direction: "center",
+            className: "land-tooltip"
+        });
 
         landMarker.on('click', () => {
             landMarker.bindPopup(`<h3>${land.name}</h3>
