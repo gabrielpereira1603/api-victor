@@ -79,10 +79,81 @@ new class extends Component{
     </div>
 
     <h1>Exibindo mapa com Leaflet</h1>
+    @php
+        $geojsons = [
+            'ESTRADAS_PAVIMENTADAS.geojson',
+            'confrontantes.geojson',
+            'FAIXA_DE_DOMINIO.geojson',
+            'distâncias_PMCR.geojson',
+            'PERIMETRO.geojson',
+        ];
+    @endphp
+
+    <script>
+        const geojsonUrls = [
+            @foreach ($geojsons as $file)
+            @json(asset("lot/{$file}")),
+            @endforeach
+        ];
+    </script>
+
     <div
-        id="map"
+        id="map2"
         data-lat="-18.519336616792426"
         data-lng="-53.16138344264474"
         style="height: 500px; width: 100%;">
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const map = L.map("map2").setView(
+                [
+                    document.getElementById("map2").dataset.lat,
+                    document.getElementById("map2").dataset.lng
+                ],
+                16
+            );
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            geojsonUrls.forEach(url => {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", url, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+
+                            const layer = L.geoJSON(data, {
+                                onEachFeature: function (feature, layer) {
+                                    layer.on("click", () => {
+                                        alert(`Camada: ${url.split('/').pop()}\nID: ${feature.properties?.id ?? 'sem id'}`);
+                                    });
+                                },
+                                style: {
+                                    color: "#FF5722",
+                                    weight: 2,
+                                    fillOpacity: 0.4
+                                }
+                            });
+
+                            if (layer.getLayers().length > 0) {
+                                layer.addTo(map);
+                                map.fitBounds(layer.getBounds());
+                            } else {
+                                console.warn(`GeoJSON vazio ou inválido: ${url}`);
+                            }
+
+                        } catch (err) {
+                            console.error(`Erro ao carregar o arquivo ${url}:`, err);
+                        }
+                    }
+                };
+                xhr.send();
+            });
+        });
+    </script>
+
+
 </div>

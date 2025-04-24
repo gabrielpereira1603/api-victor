@@ -100,7 +100,7 @@
             </div>
 
             <div class="flex gap-2 justify-end mt-6">
-                <x-cancel-button @click="$dispatch('close-modal', 'v')" class="ml-4">
+                <x-cancel-button @click="$dispatch('close-modal', 'createAlert')" class="ml-4">
                     Fechar
                 </x-cancel-button>
 

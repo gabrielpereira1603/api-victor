@@ -1,4 +1,7 @@
 import L from "leaflet";
+// Se estiver usando build com NPM/webpack/vite, também importe o CSS:
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+import '@geoman-io/leaflet-geoman-free';
 
 document.addEventListener('DOMContentLoaded', () => {
     const mapElement = document.getElementById('map-create-lands');
@@ -9,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const landsCoordinates = mapElement.dataset.lands_coordinates;
     const subdivisionCoordinates = mapElement.dataset.subdivision_coordinates;
     const subdivisionDetails = JSON.parse(mapElement.dataset.subdivision_details);
-
 
     if (firstCoordinates) {
         initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinates, landsCoordinates, subdivisionDetails);
@@ -28,67 +30,60 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
         attribution: '© OpenStreetMap Contributors'
     }).addTo(map);
 
-    // Adiciona a funcionalidade de desenho e edição apenas para polígonos
-    const drawnItems = new L.FeatureGroup(); // Camada para armazenar os itens desenhados
+    // Camada onde os novos polígonos serão armazenados
+    const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems,
-            remove: true // Permite remover os desenhos
-        },
-        draw: {
-            polygon: {
-                shapeOptions: {
-                    color: 'black',
-                    weight: 5
-                }
-            },
-            rectangle: false, // Não permitir retângulos
-            circle: false, // Não permitir círculos
-            marker: false, // Não permitir marcadores
-            polyline: false // Não permitir linhas
-        }
+    // Ativa os controles do Leaflet-Geoman
+    map.pm.addControls({
+        position: 'topleft',
+        drawPolygon: true,
+        editMode: true,
+        dragMode: true,
+        cutPolygon: true,
+        removalMode: true
     });
-    map.addControl(drawControl);
 
-    // Escutar o evento de criação e adicionar o polígono desenhado ao mapa
-    map.on(L.Draw.Event.CREATED, function (event) {
-        const layer = event.layer;
+    // Opções globais para snapping
+    map.pm.setGlobalOptions({
+        snapToSelf: false,
+        snapDistance: 20
+    });
+
+    // Evento de criação de polígono
+    map.on('pm:create', e => {
+        const layer = e.layer;
         drawnItems.addLayer(layer);
 
-        // Corrigir a estrutura das coordenadas antes de enviar
-        const newCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
+        const coordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
 
-        console.log('Enviando coordenadas para Livewire:', newCoordinates);
+        console.log('Coordenadas desenhadas:', coordinates);
 
-        Livewire.dispatch('updateCoordinates', { coordinates: newCoordinates });
+        Livewire.dispatch('updateCoordinates', { coordinates });
 
         const coordinatesInput = document.getElementById('coordinates');
         if (coordinatesInput) {
-            coordinatesInput.value = JSON.stringify(newCoordinates);
+            coordinatesInput.value = JSON.stringify(coordinates);
         }
     });
 
-    map.on(L.Draw.Event.EDITED, function (event) {
-        const layers = event.layers;
-
-        layers.eachLayer(function (layer) {
+    // Evento de edição de polígono
+    map.on('pm:edit', e => {
+        e.layers.eachLayer(layer => {
             const updatedCoordinates = layer.getLatLngs()[0].map(latlng => [latlng.lat, latlng.lng]);
 
-            console.log('Coordenadas atualizadas para Livewire:', updatedCoordinates);
+            console.log('Coordenadas atualizadas:', updatedCoordinates);
 
             const coordinatesInput = document.getElementById('coordinates');
             if (coordinatesInput) {
                 coordinatesInput.value = JSON.stringify(updatedCoordinates);
             }
 
-            // Enviar as coordenadas atualizadas para o Livewire
             Livewire.dispatch('updateCoordinates', { coordinates: updatedCoordinates });
         });
     });
 
-    // Exibir Subdivisões, Quarteirões e Terrenos
+    // Exibir Subdivisão
     if (subdivisionCoordinates) {
         const parsedSubdivision = JSON.parse(subdivisionCoordinates);
         L.polygon(parsedSubdivision, { color: 'yellow', weight: 2, fillColor: '#FFFF99', fillOpacity: 0.4 })
@@ -153,6 +148,4 @@ function initializeMap(firstCoordinates, subdivisionCoordinates, blocksCoordinat
             });
         });
     }
-
-
 }

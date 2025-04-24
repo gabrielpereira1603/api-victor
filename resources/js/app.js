@@ -10,7 +10,10 @@ import './Blocks/create_blocks.js'
 import './Lands/create_lands.js'
 import './Lands/edit_lands.js'
 import 'leaflet-draw';
-import 'leaflet-draw/dist/leaflet.draw.css';
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet-snap";
+import "leaflet-geometryutil";
 
 // Adiciona Alpine ao escopo global
 window.A = A;
